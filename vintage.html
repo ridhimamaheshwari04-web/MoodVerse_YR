@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vintage — Moodverse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --warm: #5D4037;
+      --amber: #FF8F00;
+      --cream: #FFF8F0;
+      --paper: #F5ECD7;
+      --sepia: #8D6E63;
+      --dark: #3E2723;
+      --tan: #BCAAA4;
+    }
+
+    body {
+      font-family: 'Lora', serif;
+      background: var(--paper);
+      color: var(--warm); min-height: 100vh; overflow-x: hidden;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f5ecd7'/%3E%3Crect width='1' height='1' fill='%23ede0cb' opacity='0.5'/%3E%3C/svg%3E");
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse at top left, rgba(255,200,100,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at bottom right, rgba(141,110,99,0.1) 0%, transparent 60%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 72px;
+      background: rgba(245,236,215,0.92); backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--tan);
+    }
+    .nav-back {
+      text-decoration: none; color: var(--warm); font-size: 0.9rem;
+      padding: 8px 16px; border-radius: 4px;
+      border: 1px solid var(--tan); transition: all 0.2s;
+      font-style: italic;
+    }
+    .nav-back:hover { background: rgba(141,110,99,0.1); }
+    .nav-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--dark); font-style: italic;
+      letter-spacing: 0.02em;
+    }
+    .nav-badge {
+      padding: 8px 20px; border-radius: 4px;
+      background: var(--warm); color: var(--cream);
+      font-size: 0.85rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center; padding: 80px 24px 60px; position: relative; z-index: 1;
+    }
+    .hero::before, .hero::after {
+      content: '— ✦ —'; display: block; color: var(--sepia); font-size: 1.2rem;
+      letter-spacing: 0.3em; margin-bottom: 24px; opacity: 0.7;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      color: var(--dark); line-height: 1.1; margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em { font-style: italic; color: var(--sepia); }
+    .hero p {
+      font-style: italic; font-size: 1.05rem; color: var(--sepia);
+      max-width: 480px; margin: 0 auto 32px; line-height: 1.8;
+    }
+    .year-badge {
+      display: inline-block; padding: 8px 24px;
+      border: 2px solid var(--sepia); border-radius: 2px;
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--sepia); margin-bottom: 48px;
+    }
+
+    /* ── TABS ── */
+    .tabs { display: flex; justify-content: center; gap: 0; padding: 0 24px 48px; position: relative; z-index: 1; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 12px 22px; border: 1px solid var(--tan); cursor: pointer;
+      font-family: 'Lora', serif; font-size: 0.9rem; font-style: italic;
+      background: rgba(255,248,240,0.7); color: var(--sepia);
+      transition: all 0.3s; margin: 0 -1px;
+    }
+    .tab-btn:first-child { border-radius: 4px 0 0 4px; }
+    .tab-btn:last-child { border-radius: 0 4px 4px 0; }
+    .tab-btn.active { background: var(--warm); color: var(--cream); border-color: var(--warm); z-index: 1; }
+    .tab-btn:hover:not(.active) { background: rgba(141,110,99,0.1); }
+
+    /* ── CONTENT ── */
+    .content { display: none; padding: 0 48px 100px; position: relative; z-index: 1; }
+    .content.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+    /* Gallery — polaroid style */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px; }
+    .polaroid {
+      background: white; padding: 12px 12px 40px; box-shadow: 4px 6px 20px rgba(61,39,35,0.2);
+      cursor: pointer; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+      position: relative;
+    }
+    .polaroid:nth-child(odd) { transform: rotate(-1.5deg); }
+    .polaroid:nth-child(even) { transform: rotate(1deg); }
+    .polaroid:hover { transform: rotate(0) scale(1.04) translateY(-8px); box-shadow: 8px 16px 40px rgba(61,39,35,0.3); z-index: 2; }
+    .polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; filter: sepia(0.3) contrast(1.05); }
+    .polaroid .caption { text-align: center; padding-top: 12px; font-style: italic; font-size: 0.85rem; color: var(--sepia); }
+
+    /* Articles */
+    .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .article-card {
+      padding: 32px; background: rgba(255,248,240,0.8);
+      border: 1px solid var(--tan); border-radius: 4px;
+      transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
+    }
+    .article-card:hover { transform: translateY(-4px); box-shadow: 6px 8px 24px rgba(61,39,35,0.15); }
+    .article-date { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--sepia); margin-bottom: 12px; }
+    .article-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--dark); margin-bottom: 12px; line-height: 1.4; }
+    .article-excerpt { font-size: 0.9rem; color: var(--sepia); line-height: 1.8; font-style: italic; }
+    .article-divider { border: none; border-top: 1px solid var(--tan); margin: 16px 0; }
+
+    /* Poems */
+    .poem-container { max-width: 680px; margin: 0 auto; }
+    .poem-card {
+      padding: 48px; background: rgba(255,248,240,0.7);
+      border: 1px solid var(--tan); border-radius: 4px; margin-bottom: 32px;
+      text-align: center; position: relative;
+    }
+    .poem-card::before, .poem-card::after { content: '❧'; font-size: 1.5rem; color: var(--tan); display: block; margin-bottom: 20px; }
+    .poem-card::after { margin-top: 20px; margin-bottom: 0; }
+    .poem-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--dark); margin-bottom: 24px; }
+    .poem-text { font-style: italic; font-size: 1rem; line-height: 2.2; color: var(--warm); }
+    .poem-author { margin-top: 20px; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sepia); }
+
+    /* ── WALLPAPER TAB ── */
+    .wallpaper-intro { text-align: center; margin-bottom: 40px; }
+    .wallpaper-intro h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--dark); margin-bottom: 10px; }
+    .wallpaper-intro p { font-style: italic; color: var(--sepia); font-size: 0.95rem; }
+    .wallpaper-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .wallpaper-card {
+      position: relative; border-radius: 8px; overflow: hidden;
+      box-shadow: 4px 6px 24px rgba(61,39,35,0.2);
+      cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+      aspect-ratio: 16/10;
+    }
+    .wallpaper-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 8px 16px 40px rgba(61,39,35,0.3); }
+    .wallpaper-card img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.4) contrast(1.05) brightness(0.95); transition: filter 0.3s; }
+    .wallpaper-card:hover img { filter: sepia(0.15) contrast(1.1) brightness(1); }
+    .wallpaper-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(62,39,35,0.75) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+    }
+    .wallpaper-title { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1.05rem; margin-bottom: 4px; }
+    .wallpaper-meta { font-size: 0.75rem; color: var(--tan); font-style: italic; letter-spacing: 0.08em; }
+    .wallpaper-download {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(245,236,215,0.85); border: 1px solid var(--tan);
+      color: var(--warm); border-radius: 4px; padding: 6px 12px;
+      font-size: 0.75rem; font-family: 'Lora', serif; font-style: italic;
+      cursor: pointer; text-decoration: none;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .wallpaper-card:hover .wallpaper-download { opacity: 1; }
+
+    /* Footer */
+    .page-footer {
+      border-top: 2px solid var(--tan); padding: 32px 48px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+      position: relative; z-index: 1; text-align: center;
+    }
+    .footer-text { font-family: 'Playfair Display', serif; color: var(--sepia); font-style: italic; }
+    .footer-moods { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mood-pill { padding: 6px 14px; border-radius: 4px; font-size: 0.8rem; font-family: 'Lora', serif; text-decoration: none; transition: transform 0.2s; border: 1px solid rgba(0,0,0,0.1); }
+    .mood-pill:hover { transform: translateY(-2px); }
+
+    /* ── GAME STYLES ── */
+    .vintage-game-wrap { max-width: 600px; margin: 0 auto; text-align: center; }
+    .vg-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--dark); margin-bottom: 8px; }
+    .vg-desc { font-style: italic; color: var(--sepia); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.7; }
+    .typewriter-box {
+      background: rgba(255,248,240,0.9); border: 2px solid var(--sepia);
+      border-radius: 4px; padding: 32px; margin-bottom: 28px;
+      box-shadow: 4px 4px 0 rgba(93,64,55,0.15);
+      font-family: 'Playfair Display', serif;
+    }
+    .vg-category { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sepia); margin-bottom: 12px; }
+    .vg-hint { font-style: italic; font-size: 1.1rem; color: var(--dark); margin-bottom: 20px; line-height: 1.6; }
+    .vg-scrambled { font-size: 1.8rem; letter-spacing: 0.25em; color: var(--warm); font-weight: 700; margin-bottom: 24px; font-family: 'Courier New', monospace; }
+    .vg-letter-boxes { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .vg-letter {
+      width: 44px; height: 52px; border-bottom: 3px solid var(--sepia);
+      display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;
+      font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--dark);
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .vg-letter.filled { border-bottom-color: var(--amber); color: var(--amber); }
+    .vg-letter.correct { border-bottom-color: #4caf50; color: #4caf50; animation: stamp 0.3s ease; }
+    @keyframes stamp { 0%{transform:scale(1.3);} 100%{transform:scale(1);} }
+    .vg-keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+    .vg-key {
+      width: 40px; height: 40px; border-radius: 4px;
+      border: 1px solid var(--tan); background: rgba(255,248,240,0.8);
+      cursor: pointer; font-family: 'Courier New', monospace; font-size: 0.9rem; font-weight: 700;
+      color: var(--warm); transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 0 var(--tan);
+    }
+    .vg-key:hover { background: rgba(141,110,99,0.15); transform: translateY(-1px); }
+    .vg-key:active { transform: translateY(1px); box-shadow: none; }
+    .vg-key.used { opacity: 0.35; pointer-events: none; }
+    .vg-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .vg-btn {
+      padding: 10px 24px; border-radius: 4px;
+      border: 1px solid var(--tan); background: rgba(255,248,240,0.8); color: var(--warm);
+      cursor: pointer; font-family: 'Lora', serif; font-size: 0.9rem; font-style: italic;
+      transition: all 0.2s;
+    }
+    .vg-btn:hover { background: var(--warm); color: var(--cream); border-color: var(--warm); }
+    .vg-score-row { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; }
+    .vg-stat { text-align: center; }
+    .vg-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--amber); }
+    .vg-stat-lbl { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sepia); }
+    .vg-msg { font-style: italic; color: var(--sepia); font-size: 0.95rem; min-height: 24px; margin-bottom: 12px; }
+    .vg-lives { font-size: 1.2rem; letter-spacing: 4px; }
+
+    @media (max-width: 768px) { nav,.content,.page-footer{padding-left:20px;padding-right:20px;} .tabs{flex-wrap:wrap;} }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-back">← Return</a>
+  <div class="nav-title">Vintage Collection</div>
+  <div class="nav-badge">🌻 Vintage</div>
+</nav>
+
+<div class="hero">
+  <h1>A <em>timeless</em><br>collection.</h1>
+  <p>"The present always will have been. What was beautiful stays beautiful, even in memory."</p>
+  <div class="year-badge">Est. Nineteen Fifty-Two</div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('gallery', this)">📷 Gallery</button>
+  <button class="tab-btn" onclick="showTab('articles', this)">📰 Stories</button>
+  <button class="tab-btn" onclick="showTab('poems', this)">🖋 Poetry</button>
+  <button class="tab-btn" onclick="showTab('wallpapers', this)">🖼 Wallpapers</button>
+  <button class="tab-btn" onclick="showTab('game', this)">🎲 Game</button>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="content active">
+  <div class="gallery-grid">
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=1" alt="Vintage"><div class="caption">Summer, 1956</div></div>
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=2" alt="Vintage"><div class="caption">Country Road, 1963</div></div>
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=3" alt="Vintage"><div class="caption">The Old Market, 1948</div></div>
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=4" alt="Vintage"><div class="caption">Autumn Walk, 1971</div></div>
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=5" alt="Vintage"><div class="caption">By The Sea, 1959</div></div>
+    <div class="polaroid"><img src="https://picsum.photos/300/300?random=6" alt="Vintage"><div class="caption">Sunday Afternoon, 1965</div></div>
+  </div>
+</div>
+
+<!-- STORIES -->
+<div id="articles" class="content">
+  <div class="articles-grid">
+    <div class="article-card"><div class="article-date">March 14, 1958</div><div class="article-title">The Art of Slow Living in a Fast World</div><hr class="article-divider"><p class="article-excerpt">There was a time when mornings belonged to silence, when letters were written by hand and evenings ended with the fading light…</p></div>
+    <div class="article-card"><div class="article-date">July 3, 1962</div><div class="article-title">What the Old Photographs Kept</div><hr class="article-divider"><p class="article-excerpt">Every image carries the weight of its moment — the dust, the light, the particular softness of a face not yet marked by years…</p></div>
+    <div class="article-card"><div class="article-date">November 22, 1955</div><div class="article-title">On the Virtue of Handwritten Notes</div><hr class="article-divider"><p class="article-excerpt">A letter written in ink cannot be deleted. It carries the pressure of the pen, the hesitation of crossed words, the warmth of a hand…</p></div>
+    <div class="article-card"><div class="article-date">April 8, 1969</div><div class="article-title">The Kitchen as a Place of Memory</div><hr class="article-divider"><p class="article-excerpt">More than any room in a house, the kitchen holds time. Recipes passed down. The smell of something your grandmother used to make…</p></div>
+    <div class="article-card"><div class="article-date">September 12, 1952</div><div class="article-title">The Sound of a Gramophone at Dusk</div><hr class="article-divider"><p class="article-excerpt">There was a particular hour — just as the light turned amber and the street grew quiet — when Mr. Holloway would wind his gramophone. The whole neighbourhood knew it as the signal: the day was done, something gentler had begun…</p></div>
+    <div class="article-card"><div class="article-date">February 5, 1961</div><div class="article-title">Letters Never Sent</div><hr class="article-divider"><p class="article-excerpt">She kept them in a biscuit tin under the bed. Forty-seven letters, all addressed, all sealed, none posted. Her daughter found them years later and understood, at last, why her mother had always seemed to be waiting for something…</p></div>
+    <div class="article-card"><div class="article-date">June 30, 1946</div><div class="article-title">On Returning to a Familiar Town</div><hr class="article-divider"><p class="article-excerpt">The bakery was still there, but it sold different things now. The elm tree at the corner had been cut down. The fountain in the square still ran, though nobody sat beside it. Coming home, he realised, is never the same journey twice…</p></div>
+    <div class="article-card"><div class="article-date">October 18, 1973</div><div class="article-title">What the Cobblestones Remember</div><hr class="article-divider"><p class="article-excerpt">Centuries of footfall have polished them smooth. The merchant, the soldier, the bride, the child late for school — all pressed their weight into the same stones. To walk an old street is to walk inside a river of forgotten lives…</p></div>
+  </div>
+</div>
+
+<!-- POETRY -->
+<div id="poems" class="content">
+  <div class="poem-container">
+    <div class="poem-card">
+      <div class="poem-title">Faded Afternoon</div>
+      <div class="poem-text">The light falls gold through lace curtains,<br>soft as a photograph of something<br>that has not yet become memory.<br><br>I watch the dust move in afternoon air<br>and think: this, too, will be something<br>someone misses.</div>
+      <div class="poem-author">— Anon., c. 1952</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">What Remains</div>
+      <div class="poem-text">The chair still holds the shape of her.<br>The cup still wears the ring she left.<br>Time is not the thief they say it is —<br>it is the keeper of small things.</div>
+      <div class="poem-author">— Anon., c. 1967</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">The Last Telegram</div>
+      <div class="poem-text">Twelve words. Stop.<br>They cost a fortune then,<br>those measured sentences.<br><br>We learned to love<br>inside economy —<br>arriving safe. Stop. Missing you. Stop.<br><br>Now words cost nothing<br>and we say so little.</div>
+      <div class="poem-author">— Anon., c. 1943</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">Sunday Market</div>
+      <div class="poem-text">The cobblestones smell of rain and bread.<br>A woman in a yellow coat<br>touches the peaches — does not buy.<br><br>I watch her from the flower stall.<br>She is thinking of someone.<br>We all are, on Sunday mornings.</div>
+      <div class="poem-author">— Anon., c. 1958</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">The Gramophone Evening</div>
+      <div class="poem-text">Father wound the gramophone<br>with the patience of a man<br>who believed music was prayer.<br><br>The needle found the groove.<br>The room filled like a church.<br>We did not speak — we understood<br>that some silences are full.</div>
+      <div class="poem-author">— Anon., c. 1931</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">Old Ink</div>
+      <div class="poem-text">There is something about a word<br>written in ink —<br>it commits. It cannot be undone.<br><br>The writer knew this<br>and chose the word carefully.<br>We have forgotten how to be careful.</div>
+      <div class="poem-author">— Anon., c. 1944</div>
+    </div>
+    <div class="poem-card">
+      <div class="poem-title">Winter in the Parlour</div>
+      <div class="poem-text">Snow at the window.<br>The fire. The book.<br>The dog asleep against the warmth.<br><br>This was a whole life,<br>once.<br>Perhaps it still is.</div>
+      <div class="poem-author">— Anon., c. 1939</div>
+    </div>
+  </div>
+</div>
+
+<!-- WALLPAPERS -->
+<div id="wallpapers" class="content">
+  <div class="wallpaper-intro">
+    <h2>Vintage Wallpapers</h2>
+    <p>Hover to preview in full colour · Click to open · Right-click to save</p>
+  </div>
+  <div class="wallpaper-grid">
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=10','_blank')">
+      <img src="https://picsum.photos/560/350?random=10" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Golden Fields</div>
+        <div class="wallpaper-meta">Harvest Season · 1954</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=10" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=11','_blank')">
+      <img src="https://picsum.photos/560/350?random=11" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">The Old Harbour</div>
+        <div class="wallpaper-meta">Maritime Scenes · 1948</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=11" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=12','_blank')">
+      <img src="https://picsum.photos/560/350?random=12" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Forest Morning</div>
+        <div class="wallpaper-meta">Country Life · 1961</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=12" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=13','_blank')">
+      <img src="https://picsum.photos/560/350?random=13" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Cobblestone Lane</div>
+        <div class="wallpaper-meta">Old Town · 1937</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=13" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=14','_blank')">
+      <img src="https://picsum.photos/560/350?random=14" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Seaside Promenade</div>
+        <div class="wallpaper-meta">Summer Holiday · 1959</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=14" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=15','_blank')">
+      <img src="https://picsum.photos/560/350?random=15" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">The Reading Room</div>
+        <div class="wallpaper-meta">Quiet Hours · 1946</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=15" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=16','_blank')">
+      <img src="https://picsum.photos/560/350?random=16" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Autumn Avenue</div>
+        <div class="wallpaper-meta">October Walk · 1963</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=16" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+    <div class="wallpaper-card" onclick="window.open('https://picsum.photos/1920/1080?random=17','_blank')">
+      <img src="https://picsum.photos/560/350?random=17" alt="Wallpaper">
+      <div class="wallpaper-overlay">
+        <div class="wallpaper-title">Winter Farmstead</div>
+        <div class="wallpaper-meta">Cold Season · 1952</div>
+      </div>
+      <a class="wallpaper-download" href="https://picsum.photos/1920/1080?random=17" target="_blank" onclick="event.stopPropagation()">↓ Download</a>
+    </div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="game" class="content">
+  <div class="vintage-game-wrap">
+    <div class="vg-title">📜 The Wordsmith's Trial</div>
+    <div class="vg-desc">Read the vintage clue, then unscramble the hidden word by clicking the letters below.</div>
+    <div class="vg-score-row">
+      <div class="vg-stat"><div class="vg-stat-num" id="vScore">0</div><div class="vg-stat-lbl">Score</div></div>
+      <div class="vg-stat"><div class="vg-lives" id="vLives">❤️❤️❤️</div><div class="vg-stat-lbl">Lives</div></div>
+      <div class="vg-stat"><div class="vg-stat-num" id="vStreak">0</div><div class="vg-stat-lbl">Streak</div></div>
+    </div>
+    <div class="typewriter-box">
+      <div class="vg-category" id="vCategory">CATEGORY</div>
+      <div class="vg-hint" id="vHint">Loading clue…</div>
+      <div class="vg-scrambled" id="vScrambled">—</div>
+      <div class="vg-letter-boxes" id="vAnswer"></div>
+    </div>
+    <div class="vg-keyboard" id="vKeyboard"></div>
+    <div class="vg-msg" id="vMsg">Click a letter key to begin…</div>
+    <div class="vg-actions">
+      <button class="vg-btn" onclick="clearVGuess()">← Erase</button>
+      <button class="vg-btn" onclick="checkVAnswer()">✓ Submit</button>
+      <button class="vg-btn" onclick="skipVWord()">Skip →</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <div class="footer-text">✦ Moodverse</div>
+  <div class="footer-moods">
+    <a href="happy.html" class="mood-pill" style="background:#fff3e0;color:#795548;">😊 Happy</a>
+    <a href="relax.html" class="mood-pill" style="background:#e3f2fd;color:#1565c0;">🌊 Relax</a>
+    <a href="dark.html" class="mood-pill" style="background:#111;color:#00ffff;">🌙 Dark</a>
+    <a href="vintage.html" class="mood-pill" style="background:#efebe9;color:#4e342e;">🌻 Vintage</a>
+    <a href="productive.html" class="mood-pill" style="background:#ede7f6;color:#4527a0;">🏃 Productive</a>
+    <a href="mysterious.html" class="mood-pill" style="background:#1a1a2e;color:#d4c9ff;">🌌 Mysterious</a>
+  </div>
+</div>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── VINTAGE WORD GAME ──
+  const V_WORDS = [
+    { word:'GRAMOPHONE', category:'Antique Objects', hint:'A device with a horn that played music from rotating discs in parlours of the 1920s.' },
+    { word:'PARCHMENT', category:'Writing Materials', hint:'Before paper, scribes wrote on this dried animal skin, now synonymous with old documents.' },
+    { word:'PARLOUR', category:'Victorian Rooms', hint:'The formal sitting room of a Victorian home, reserved for receiving guests.' },
+    { word:'INKWELL', category:'Writing Desk', hint:'A small jar of ink that writers would dip their quill or nib pen into.' },
+    { word:'TELEGRAM', category:'Communication', hint:'An urgent message transmitted by wire, the text printed on small strips of paper.' },
+    { word:'LANTERN', category:'Light Sources', hint:'Before electricity, travellers carried this glass-enclosed oil lamp after dark.' },
+    { word:'COBBLESTONE', category:'Old Streets', hint:'The rounded stones that paved old city streets, making carriage wheels rattle.' },
+    { word:'CARRIAGE', category:'Transport', hint:'A horse-drawn vehicle with four wheels used by the wealthy to travel in style.' },
+    { word:'BONNET', category:'Fashion', hint:'A ladies hat tied under the chin with ribbons, fashionable in the 1800s.' },
+    { word:'SATCHEL', category:'Accessories', hint:'A leather bag with a long strap, carried by schoolchildren and travelling merchants.' },
+    { word:'TYPEWRITER', category:'Office Items', hint:'A mechanical machine with keys that stamp inked letters onto paper.' },
+    { word:'SPECTACLES', category:'Accessories', hint:'The old-fashioned word for eyeglasses, often wire-rimmed and round.' },
+    { word:'VELVET', category:'Fabrics', hint:'A rich, soft fabric with a short pile, favoured for curtains and evening wear in grand parlours.' },
+    { word:'COMPASS', category:'Navigation', hint:'A brass instrument with a magnetised needle that always points north, carried by explorers and sailors.' },
+    { word:'PERFUME', category:'Vanity Table', hint:'A scented liquid stored in a glass bottle with an atomiser bulb, applied before an evening out.' },
+    { word:'CHANDELIER', category:'Furnishings', hint:'A grand branching light fixture hung from a ballroom ceiling, dripping with crystal drops.' },
+    { word:'ACCORDION', category:'Music', hint:'A bellows instrument squeezed between two hands, played at village fetes and folk dances.' },
+    { word:'ENVELOPE', category:'Correspondence', hint:'A folded paper sleeve into which a handwritten letter is tucked before sealing with wax.' },
+    { word:'CLOCKTOWER', category:'Architecture', hint:'A tall civic structure with a large clock face visible across the town square for all to read the hour.' },
+    { word:'HORSESHOE', category:'Countryside', hint:'A curved iron shoe nailed to a horse\'s hoof, also hung above doorways for good fortune.' },
+    { word:'PORCELAIN', category:'Antique Objects', hint:'Fine white ceramic fired at high heat, used for delicate cups, figurines, and heirloom dinner sets.' },
+    { word:'CANDELABRA', category:'Light Sources', hint:'A branched holder for several candles, placed on dining tables for formal evening meals.' },
+    { word:'MONOCLE', category:'Accessories', hint:'A single circular lens worn in one eye, the signature eyewear of Victorian gentlemen.' },
+    { word:'WRISTWATCH', category:'Fashion', hint:'A timepiece strapped to the wrist — a novelty in the early 1900s, considered quite daring.' },
+    { word:'QUILL', category:'Writing Desk', hint:'A large feather, its hollow tip trimmed to a point and dipped in ink to write.' },
+    { word:'SEWING', category:'Domestic Arts', hint:'The craft of joining fabric with needle and thread, a skill every household once required.' },
+  ];
+
+  let vCurrent=null, vGuess=[], vScore=0, vLives=3, vStreak=0, vUsed=new Set();
+
+  function scramble(word) {
+    let a=word.split(''); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    return a.join('') === word ? scramble(word) : a.join('');
+  }
+
+  function newVWord() {
+    vGuess=[]; vUsed=new Set();
+    const remaining=V_WORDS.filter(w=>w!==vCurrent);
+    vCurrent=remaining[Math.floor(Math.random()*remaining.length)];
+    const sc=scramble(vCurrent.word);
+    document.getElementById('vCategory').textContent=vCurrent.category;
+    document.getElementById('vHint').textContent=vCurrent.hint;
+    document.getElementById('vScrambled').textContent=sc.split('').join(' ');
+    renderVAnswer();
+    renderVKeyboard(sc);
+    document.getElementById('vMsg').textContent='Click letters to spell the word…';
+  }
+
+  function renderVAnswer() {
+    const box=document.getElementById('vAnswer');
+    box.innerHTML='';
+    for(let i=0;i<vCurrent.word.length;i++) {
+      const d=document.createElement('div');
+      d.className='vg-letter'+(vGuess[i]?' filled':'');
+      d.textContent=vGuess[i]||'';
+      d.dataset.i=i;
+      if(vGuess[i]) d.onclick=()=>removeVLetter(i);
+      box.appendChild(d);
+    }
+  }
+
+  function renderVKeyboard(scrambled) {
+    const kb=document.getElementById('vKeyboard');
+    kb.innerHTML='';
+    scrambled.split('').forEach((l,i)=>{
+      const btn=document.createElement('button');
+      btn.className='vg-key'; btn.textContent=l; btn.dataset.idx=i;
+      btn.onclick=()=>addVLetter(l,btn);
+      kb.appendChild(btn);
+    });
+  }
+
+  function addVLetter(letter, btn) {
+    if(vGuess.length>=vCurrent.word.length) return;
+    vGuess.push(letter);
+    btn.classList.add('used');
+    renderVAnswer();
+  }
+
+  function removeVLetter(i) {
+    const letter=vGuess.splice(i,1)[0];
+    const keys=document.querySelectorAll('.vg-key');
+    keys.forEach(k=>{ if(k.textContent===letter&&k.classList.contains('used')&&!vUsed.has(k)){vUsed.add(k);k.classList.remove('used');} });
+    renderVAnswer();
+  }
+
+  function clearVGuess() {
+    vGuess=[]; document.querySelectorAll('.vg-key').forEach(k=>k.classList.remove('used'));
+    renderVAnswer(); document.getElementById('vMsg').textContent='Cleared. Try again…';
+  }
+
+  function checkVAnswer() {
+    if(vGuess.length<vCurrent.word.length){document.getElementById('vMsg').textContent='Fill all the letters first!';return;}
+    const attempt=vGuess.join('');
+    if(attempt===vCurrent.word) {
+      vStreak++; const pts=10*vStreak; vScore+=pts;
+      document.getElementById('vScore').textContent=vScore;
+      document.getElementById('vStreak').textContent=vStreak;
+      document.getElementById('vMsg').textContent=`✦ Correct! +${pts} points. Streak × ${vStreak}`;
+      document.querySelectorAll('.vg-letter').forEach(l=>l.classList.add('correct'));
+      setTimeout(newVWord, 1400);
+    } else {
+      vStreak=0; vLives--;
+      document.getElementById('vStreak').textContent=0;
+      document.getElementById('vLives').textContent='❤️'.repeat(Math.max(0,vLives))+'🖤'.repeat(3-Math.max(0,vLives));
+      if(vLives<=0){document.getElementById('vMsg').textContent=`Game over! The word was "${vCurrent.word}". Final score: ${vScore}`; setTimeout(()=>{vLives=3;vScore=0;document.getElementById('vLives').textContent='❤️❤️❤️';document.getElementById('vScore').textContent=0;newVWord();},2500); return;}
+      document.getElementById('vMsg').textContent=`Not quite… the letters are right, but the order isn't.`;
+      clearVGuess();
+    }
+  }
+
+  function skipVWord() {
+    document.getElementById('vMsg').textContent=`Skipped. The word was "${vCurrent.word}".`;
+    vStreak=0; document.getElementById('vStreak').textContent=0;
+    setTimeout(newVWord,1200);
+  }
+
+  newVWord();
+</script>
+</body>
+</html>

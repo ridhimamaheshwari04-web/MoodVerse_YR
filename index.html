@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodverse — Feel the Vibe</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%237c6dfa%22 opacity=%220.3%22/><text y=%22.9em%22 x=%22.1em%22 font-size=%2270%22>✦</text></svg>">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #f0eff8;
+      --muted: #7c7c9a;
+      --accent: #7c6dfa;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.6;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+
+    .orb1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(124, 109, 250, 0.18);
+      top: -100px;
+      left: -100px;
+      animation: drift1 12s ease-in-out infinite alternate;
+    }
+
+    .orb2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(251, 113, 133, 0.12);
+      bottom: -80px;
+      right: -80px;
+      animation: drift2 10s ease-in-out infinite alternate;
+    }
+
+    .orb3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(34, 211, 238, 0.08);
+      top: 50%;
+      left: 60%;
+      animation: drift3 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift1 {
+      to {
+        transform: translate(60px, 40px);
+      }
+    }
+
+    @keyframes drift2 {
+      to {
+        transform: translate(-40px, -60px);
+      }
+    }
+
+    @keyframes drift3 {
+      to {
+        transform: translate(30px, -50px);
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(124, 109, 250, 0.4);
+      background: rgba(124, 109, 250, 0.08);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #c4b5fd;
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7c6dfa;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: #c4b5fd;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, #7c6dfa, #a78bfa);
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 30px rgba(124, 109, 250, 0.35);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(124, 109, 250, 0.45);
+    }
+
+    .btn-ghost {
+      padding: 14px 32px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fadeUp 1s 0.6s ease both;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollAnim 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollAnim {
+
+      0%,
+      100% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scaleY(0.5);
+        opacity: 0.4;
+      }
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    /* MOOD TRACKER */
+    .mood-tracker-section {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .tracker-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .tracker-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .tracker-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .emoji-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .emoji-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 12px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+
+    .emoji-option:hover {
+      transform: translateY(-4px) scale(1.03);
+      border-color: rgba(124, 109, 250, 0.4);
+    }
+
+    .emoji-option.selected {
+      border-color: var(--accent);
+      background: rgba(124, 109, 250, 0.12);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 24px rgba(124, 109, 250, 0.3);
+    }
+
+    .opt-emoji {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      transition: transform 0.2s;
+      display: block;
+    }
+
+    .emoji-option.selected .opt-emoji {
+      transform: scale(1.2);
+    }
+
+    .opt-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .emoji-option.selected .opt-label {
+      color: #c4b5fd;
+      font-weight: 500;
+    }
+
+    .tracker-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mood-note {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      resize: none;
+      height: 80px;
+    }
+
+    .mood-note:focus {
+      outline: none;
+      border-color: rgba(124, 109, 250, 0.4);
+      background: rgba(124, 109, 250, 0.05);
+    }
+
+    .tracker-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 13px;
+      border-radius: 100px;
+      border: none;
+      background: linear-gradient(135deg, #7c6dfa, #a78bfa);
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 24px rgba(124, 109, 250, 0.3);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 30px rgba(124, 109, 250, 0.4);
+    }
+
+    .btn-doodle {
+      padding: 13px 24px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .btn-doodle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .today-entry {
+      background: rgba(124, 109, 250, 0.1);
+      border: 1px solid rgba(124, 109, 250, 0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .te-emoji {
+      font-size: 2rem;
+    }
+
+    .te-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .te-mood {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: #c4b5fd;
+    }
+
+    .te-action {
+      margin-left: auto;
+      font-size: 0.82rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .te-action:hover {
+      color: var(--text);
+    }
+
+    .save-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #16161f;
+      border: 1px solid rgba(124, 109, 250, 0.4);
+      border-radius: 100px;
+      padding: 14px 28px;
+      font-size: 0.9rem;
+      color: #c4b5fd;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+      z-index: 3000;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .save-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* DOODLE MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: #16161f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 28px;
+      width: 90%;
+      max-width: 520px;
+      transform: scale(0.95);
+      transition: transform 0.25s;
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    #doodle-canvas {
+      width: 100%;
+      border-radius: 12px;
+      background: #fff;
+      cursor: crosshair;
+      display: block;
+      touch-action: none;
+    }
+
+    .canvas-tools {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .color-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .color-btn:hover,
+    .color-btn.active {
+      transform: scale(1.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* .brush-size { -webkit-appearance:none; height:4px; background:rgba(255,255,255,0.2); border-radius:4px; outline:none; cursor:pointer; width:80px; } */
+    .canvas-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn-canvas {
+      flex: 1;
+      padding: 10px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      transition: background 0.2s;
+    }
+
+    .btn-canvas:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn-canvas.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* FEATURES STRIP */
+    .features-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 64px;
+      overflow-x: auto;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .feature-item strong {
+      color: var(--text);
+    }
+
+    .feature-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* MOODS GRID */
+    .moods-section {
+      padding: 80px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .moods-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .moods-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .moods-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .moods-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .mood-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 260px;
+      padding: 32px;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s, border-color 0.3s;
+    }
+
+    .mood-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .mood-card .card-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.12;
+      transition: opacity 0.4s;
+    }
+
+    .mood-card:hover .card-bg {
+      opacity: 0.22;
+    }
+
+    .mood-card.happy .card-bg {
+      background: linear-gradient(135deg, #ffe259, #ffa751);
+    }
+
+    .mood-card.relax .card-bg {
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    }
+
+    .mood-card.dark .card-bg {
+      background: radial-gradient(circle at 30% 30%, #302b63, #0f0c29);
+    }
+
+    .mood-card.vintage .card-bg {
+      background: linear-gradient(135deg, #d7ccc8, #a1887f);
+    }
+
+    .mood-card.productive .card-bg {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .mood-card.mysterious .card-bg {
+      background: linear-gradient(135deg, #1f1c2c, #6c5ce7);
+    }
+
+    .mood-card.happy:hover {
+      box-shadow: 0 20px 60px rgba(255, 167, 81, 0.25);
+    }
+
+    .mood-card.relax:hover {
+      box-shadow: 0 20px 60px rgba(161, 196, 253, 0.25);
+    }
+
+    .mood-card.dark:hover {
+      box-shadow: 0 20px 60px rgba(0, 255, 255, 0.15);
+    }
+
+    .mood-card.vintage:hover {
+      box-shadow: 0 20px 60px rgba(161, 136, 127, 0.25);
+    }
+
+    .mood-card.productive:hover {
+      box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    }
+
+    .mood-card.mysterious:hover {
+      box-shadow: 0 20px 60px rgba(108, 92, 231, 0.3);
+    }
+
+    .mood-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      line-height: 1;
+      position: relative;
+    }
+
+    .mood-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .mood-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      position: relative;
+      flex: 1;
+    }
+
+    .card-arrow {
+      position: relative;
+      margin-top: 24px;
+      align-self: flex-end;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      font-size: 1rem;
+    }
+
+    .mood-card:hover .card-arrow {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: rotate(45deg);
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .stat-box {
+      padding: 28px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    /* .stat-box .stat-num { font-family:'Space Grotesk',sans-serif; font-size:2.5rem; font-weight:700; background:linear-gradient(135deg,#c4b5fd,#7c6dfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; } */
+    .stat-box .stat-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      padding: 80px 48px;
+      overflow: hidden;
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .testimonials-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      letter-spacing: -0.02em;
+    }
+
+    .testimonials-track {
+      display: flex;
+      gap: 24px;
+      animation: scrollX 30s linear infinite;
+      width: max-content;
+    }
+
+    .testimonials-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollX {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .testimonial-card {
+      width: 320px;
+      flex-shrink: 0;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .testimonial-mood {
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .author-info .name {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .author-info .handle {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    .footer {
+  background: linear-gradient(135deg, #0a0a0a, #111827);
+  color: #fff;
+  padding: 40px 20px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* LOGO */
+.footer-logo {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* LINKS */
+.footer-links a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin: 6px 0;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color:#6c5ce7;
+  transform: translateX(5px);
+}
+
+/* CONTACT */
+.footer-contact p {
+  margin: 8px 0;
+}
+
+.footer-contact a {
+  color: #6c5ce7;
+  text-decoration: none;
+}
+
+/* SOCIAL */
+.social-icons i {
+  font-size: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.social-icons i:hover {
+  color: #6c5ce7d4;
+  transform: scale(1.2);
+}
+
+/* NEWSLETTER */
+.newsletter input {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.newsletter button {
+  padding: 8px 12px;
+  margin-left: 5px;
+  border: none;
+  background: #6c5ce7;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.newsletter button:hover {
+  background: #6c5ce7;
+}
+
+/* BOTTOM */
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  border-top: 1px solid #222;
+  padding-top: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+    
+
+   
+    /* Floating Button */
+    .nexus-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--nexus-accent);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(124, 109, 250, 0.4);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.2s;
+    }
+
+    .nexus-fab:hover {
+      transform: scale(1.05);
+    }
+
+    /* Main Wrapper */
+    .nexus-wrapper {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 900px;
+      max-width: calc(100vw - 48px);
+      height: 600px;
+      background: var(--nexus-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      display: none;
+      /* Hidden by default */
+      overflow: hidden;
+      z-index: 999;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      display: flex;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .nexus-wrapper.active {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Sidebar */
+    .nexus-sidebar {
+      width: 280px;
+      background: rgba(255, 255, 255, 0.02);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .nexus-sidebar h3 {
+      font-size: 0.75rem;
+      color: var(--nexus-muted);
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 0.7rem;
+      color: var(--nexus-muted);
+      margin-top: 4px;
+    }
+
+    /* Mood Chart */
+    .mood-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 100px;
+      margin-top: 15px;
+    }
+
+    .mood-chart .bar {
+      width: 20px;
+      background: rgba(124, 109, 250, 0.2);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .mood-chart .bar.active {
+      background: var(--nexus-accent);
+    }
+
+    .mood-chart .bar::after {
+      content: attr(data-day);
+      position: absolute;
+      bottom: -20px;
+      font-size: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--nexus-muted);
+    }
+
+    /* History */
+    .history-item {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    .history-item .date {
+      font-size: 10px;
+      color: var(--nexus-muted);
+    }
+
+    .history-item p {
+      font-size: 13px;
+      margin: 4px 0;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(124, 109, 250, 0.2);
+      color: #c4b5fd;
+    }
+
+    /* Chat Main */
+    .nexus-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .header-info h4 {
+      font-size: 14px;
+    }
+
+    .header-info p {
+      font-size: 11px;
+      color: var(--nexus-muted);
+    }
+
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .msg.bot p {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px 16px;
+      border-radius: 18px 18px 18px 4px;
+      max-width: 80%;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .time {
+      font-size: 10px;
+      color: var(--nexus-muted);
+      margin-top: 8px;
+      display: block;
+    }
+
+    .chat-input-area {
+      padding: 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+    #user-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+    }
+
+    .send-btn {
+      background: var(--nexus-accent);
+      border: none;
+      width: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nexus-sidebar {
+        display: none;
+      }
+
+      .nexus-wrapper {
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        height: 80vh;
+        border-radius: 24px 24px 0 0;
+      }
+    }
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <div class="hero-badge"><span></span> 6 unique moods available</div>
+    <h1>Your mood,<br><em>your universe.</em></h1>
+    <p class="hero-sub">Step into a world that shifts with your feelings. Six handcrafted aesthetic experiences, each
+      uniquely designed to match how you feel right now.</p>
+    <div class="hero-actions">
+      <button class="btn-primary"
+        onclick="document.getElementById('mood-tracker').scrollIntoView({behavior:'smooth'})">Track Today's
+        Mood</button>
+      <a href="about.html" class="btn-ghost">Learn more</a>
+    </div>
+    <div class="scroll-hint"><span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <div class="features-strip">
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#ffe259;"></div><span><strong>Happy</strong> — Joyful & bright</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#a1c4fd;"></div><span><strong>Relax</strong> — Calm & serene</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#00ffff;"></div><span><strong>Dark</strong> — Bold & intense</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#d7ccc8;"></div><span><strong>Vintage</strong> — Warm &
+        nostalgic</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#764ba2;"></div><span><strong>Productive</strong> — Focused &
+        driven</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot" style="background:#6c5ce7;"></div><span><strong>Mysterious</strong> — Deep &
+        ethereal</span>
+    </div>
+  </div>
+
+  <!-- MOOD TRACKER -->
+  <section id="mood-tracker" class="mood-tracker-section">
+    <div class="tracker-header">
+      <div class="section-label">Daily Check-in</div>
+      <h2 id="tracker-heading">How are you feeling today?</h2>
+      <p id="tracker-sub" style="color:var(--muted);margin-top:8px;">Select a mood, add a note, and save your entry.</p>
+    </div>
+
+    <!-- Today already logged banner -->
+    <div class="today-entry" id="today-banner" style="display:none;">
+      <span class="te-emoji" id="today-emoji">😊</span>
+      <div>
+        <div class="te-label">Today's mood</div>
+        <div class="te-mood" id="today-mood-label">Happy</div>
+      </div>
+      <span class="te-action" onclick="resetTodayEntry()">Update ↺</span>
+    </div>
+
+    <!-- Emoji Grid -->
+    <div class="emoji-selector" id="emoji-selector"></div>
+
+    <!-- Note + Doodle + Save (hidden until mood selected) -->
+    <div class="tracker-controls" id="tracker-controls" style="display:none;">
+      <textarea class="mood-note" id="mood-note" placeholder="Add a note (optional)..."></textarea>
+      <div class="tracker-actions">
+        <button class="btn-doodle" onclick="openDoodleModal()">🎨 Draw Mood</button>
+        <button class="btn-save" onclick="saveEntry()">Save Entry ✓</button>
+      </div>
+      <div id="doodle-preview" style="display:none;margin-top:8px;">
+        <img id="doodle-preview-img"
+          style="width:100%;max-height:160px;object-fit:contain;border-radius:10px;border:1px solid var(--border);"
+          alt="Doodle">
+        <span style="font-size:0.78rem;color:var(--muted);display:block;margin-top:4px;cursor:pointer;"
+          onclick="clearDoodle()">× Remove doodle</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOODS GRID -->
+  <section class="moods-section" id="moods">
+    <div class="moods-header">
+      <div class="section-label">Choose your vibe</div>
+      <h2>Six worlds. One feeling.</h2>
+      <p>Each mood is a fully immersive aesthetic experience — crafted to match your energy and amplify it.</p>
+    </div>
+    <div class="moods-grid">
+      <a href="happy.html" class="mood-card happy">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">😊</div>
+        <h3>Happy</h3>
+        <p>Sunshine gradients, bouncing energy and warm golden tones that make everything feel lighter.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="relax.html" class="mood-card relax">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">🌊</div>
+        <h3>Relax</h3>
+        <p>Ocean blues and soft clouds. Let the gentle float animations wash your stress away.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="dark.html" class="mood-card dark">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">🌙</div>
+        <h3>Dark</h3>
+        <p>Neon cyan glows on deep cosmic space. For nights when you embrace the void in style.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="vintage.html" class="mood-card vintage">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">🌻</div>
+        <h3>Vintage</h3>
+        <p>Sepia tones, serif elegance and the cosy warmth of a Sunday afternoon in old photographs.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="productive.html" class="mood-card productive">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">🏃‍♂️</div>
+        <h3>Productive</h3>
+        <p>Deep purple gradients and glass morphism. Enter flow state and get things done.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="mysterious.html" class="mood-card mysterious">
+        <div class="card-bg"></div>
+        <div class="mood-emoji">🌌</div>
+        <h3>Mysterious</h3>
+        <p>Smoke and starlight. Drift through deep indigo cosmos where nothing is fully revealed.</p>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about-section" id="about">
+    <div class="about-text">
+      <div class="section-label">Our Philosophy</div>
+      <h2>Design that<br><em style="font-family:'Playfair Display';font-style:italic;color:#c4b5fd;">feels.</em></h2>
+      <p>Moodverse was built on a simple belief: the way something looks should match the way you feel. Not the other
+        way around.</p>
+      <p>Each mood has been meticulously crafted with its own typography, color palette, animations and interactions —
+        creating genuinely distinct emotional experiences.</p>
+      <a href="about.html" class="btn-primary" style="display:inline-block;margin-top:16px;">About Us →</a>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Unique Moods</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Feelings Supported</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">CSS Animated</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Bad Vibes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section" id="reviews">
+    <div class="testimonials-header">
+      <div class="section-label">People Love It</div>
+      <h2>Vibes don't lie.</h2>
+    </div>
+    <div style="overflow:hidden;">
+      <div class="testimonials-track">
+        <div class="testimonial-card">
+          <div class="testimonial-mood">😊</div>
+          <p class="testimonial-text">"The Happy mode genuinely made my Monday feel like a Friday. The bouncy animations
+            are pure serotonin."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(255,226,89,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Priya S.</div>
+              <div class="handle">@priya_designs</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌙</div>
+          <p class="testimonial-text">"Dark mode but make it fashion. That cyan glow on deep space is probably my
+            favourite thing on the internet."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(0,255,255,0.1);">🧑</div>
+            <div class="author-info">
+              <div class="name">Aryan K.</div>
+              <div class="handle">@nightcode</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌊</div>
+          <p class="testimonial-text">"I open Relax mode after every stressful meeting. The floating card animation is
+            genuinely calming."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(161,196,253,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Sofia M.</div>
+              <div class="handle">@sofiam_ux</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌻</div>
+          <p class="testimonial-text">"Vintage mode feels like opening your grandmother's photo album. Warm, cosy and
+            incredibly nostalgic."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(215,204,200,0.2);">👨</div>
+            <div class="author-info">
+              <div class="name">Rohan T.</div>
+              <div class="handle">@rohantype</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🏃‍♂️</div>
+          <p class="testimonial-text">"I literally get more done in Productive mode. Don't know if it's placebo but the
+            focus is real."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(102,126,234,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Meera J.</div>
+              <div class="handle">@meerabuilds</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌌</div>
+          <p class="testimonial-text">"Mysterious mode is like a concept art piece. The depth of the animations is
+            something else entirely."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(108,92,231,0.2);">🧑</div>
+            <div class="author-info">
+              <div class="name">Dev R.</div>
+              <div class="handle">@devinterface</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">😊</div>
+          <p class="testimonial-text">"As a UI student this is the most creative mood-based project I've seen. Every
+            detail is considered."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(255,226,89,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Ananya P.</div>
+              <div class="handle">@ananya.ui</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌙</div>
+          <p class="testimonial-text">"The fact that each page has its own font family is a genius touch. Typography
+            truly sets the mood."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(0,255,255,0.1);">👨</div>
+            <div class="author-info">
+              <div class="name">Kabir N.</div>
+              <div class="handle">@kabirtype</div>
+            </div>
+          </div>
+        </div>
+        <!-- duplicates -->
+        <div class="testimonial-card">
+          <div class="testimonial-mood">😊</div>
+          <p class="testimonial-text">"The Happy mode genuinely made my Monday feel like a Friday. The bouncy animations
+            are pure serotonin."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(255,226,89,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Priya S.</div>
+              <div class="handle">@priya_designs</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌙</div>
+          <p class="testimonial-text">"Dark mode but make it fashion. That cyan glow on deep space is probably my
+            favourite thing on the internet."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(0,255,255,0.1);">🧑</div>
+            <div class="author-info">
+              <div class="name">Aryan K.</div>
+              <div class="handle">@nightcode</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌊</div>
+          <p class="testimonial-text">"I open Relax mode after every stressful meeting. The floating card animation is
+            genuinely calming."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(161,196,253,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Sofia M.</div>
+              <div class="handle">@sofiam_ux</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌻</div>
+          <p class="testimonial-text">"Vintage mode feels like opening your grandmother's photo album. Warm, cosy and
+            incredibly nostalgic."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(215,204,200,0.2);">👨</div>
+            <div class="author-info">
+              <div class="name">Rohan T.</div>
+              <div class="handle">@rohantype</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🏃‍♂️</div>
+          <p class="testimonial-text">"I literally get more done in Productive mode. Don't know if it's placebo but the
+            focus is real."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(102,126,234,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Meera J.</div>
+              <div class="handle">@meerabuilds</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌌</div>
+          <p class="testimonial-text">"Mysterious mode is like a concept art piece. The depth of the animations is
+            something else entirely."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(108,92,231,0.2);">🧑</div>
+            <div class="author-info">
+              <div class="name">Dev R.</div>
+              <div class="handle">@devinterface</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">😊</div>
+          <p class="testimonial-text">"As a UI student this is the most creative mood-based project I've seen. Every
+            detail is considered."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(255,226,89,0.2);">👩</div>
+            <div class="author-info">
+              <div class="name">Ananya P.</div>
+              <div class="handle">@ananya.ui</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-mood">🌙</div>
+          <p class="testimonial-text">"The fact that each page has its own font family is a genius touch. Typography
+            truly sets the mood."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:rgba(0,255,255,0.1);">👨</div>
+            <div class="author-info">
+              <div class="name">Kabir N.</div>
+              <div class="handle">@kabirtype</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+  <div class="footer-container">
+
+    <!-- Logo & About -->
+    <div>
+      <div class="footer-logo">✨ MoodVerse</div>
+      <p>Your mood-based AI companion for better conversations.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <a href="#">Moods</a>
+      <a href="#">About</a>
+      <a href="#">Reviews</a>
+      <a href="#">History</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email: <a href="mailto:yr.connect@gmail.com">yr.connect@gmail.com</a></p>
+      <p>Phone: <a href="tel:9756432676">9756432676</a></p>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="newsletter">
+      <h4>Stay Updated</h4>
+      <input type="email" id="emailInput" placeholder="Enter email">
+      <button onclick="subscribe()">Subscribe</button>
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="footer-bottom">
+    © 2026 MoodVerse | Designed with ❤️
+  </div>
+</footer>
+  <!-- SAVE TOAST -->
+  <div class="save-toast" id="save-toast">✓ Mood logged!</div>
+
+  <!-- DOODLE MODAL -->
+  <div class="modal-overlay" id="doodle-modal">
+    <div class="modal">
+      <div class="modal-title">🎨 Draw Your Mood</div>
+      <canvas id="doodle-canvas" width="460" height="260"></canvas>
+      <div class="canvas-tools">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="color-btn active" style="background:#222;" data-color="#222" onclick="setColor('#222',this)">
+          </div>
+          <div class="color-btn" style="background:#7c6dfa;" data-color="#7c6dfa" onclick="setColor('#7c6dfa',this)">
+          </div>
+          <div class="color-btn" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setColor('#ff6b6b',this)">
+          </div>
+          <div class="color-btn" style="background:#ffd93d;" data-color="#ffd93d" onclick="setColor('#ffd93d',this)">
+          </div>
+          <div class="color-btn" style="background:#6bcb77;" data-color="#6bcb77" onclick="setColor('#6bcb77',this)">
+          </div>
+          <div class="color-btn" style="background:#4d96ff;" data-color="#4d96ff" onclick="setColor('#4d96ff',this)">
+          </div>
+          <div class="color-btn" style="background:#ffffff;border:1px solid #ccc;" data-color="#ffffff"
+            onclick="setColor('#ffffff',this)" title="Eraser"></div>
+        </div>
+        <input type="range" class="brush-size" id="brush-size" min="2" max="20" value="4">
+      </div>
+      <div class="canvas-actions">
+        <button class="btn-canvas" onclick="clearCanvas()">Clear</button>
+        <button class="btn-canvas" onclick="closeDoodle()">Cancel</button>
+        <button class="btn-canvas primary" onclick="saveDoodleFromModal()">Save Doodle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Button -->
+  <button id="nexus-trigger" class="nexus-fab">
+    <span class="nexus-icon">✦</span>
+    YR NEXUS
+  </button>
+
+  <!-- Chatbot Interface -->
+  <div id="nexus-chat" class="nexus-wrapper">
+    <!-- Sidebar (Mood & History) -->
+    <aside class="nexus-sidebar">
+      <div class="sidebar-section">
+        <h3>WEEKLY MOOD</h3>
+        <p class="subtitle">Mood score this week (1–10)</p>
+        <div class="mood-chart">
+          <div class="bar" style="height: 40%" data-day="Mon"></div>
+          <div class="bar" style="height: 60%" data-day="Tue"></div>
+          <div class="bar" style="height: 35%" data-day="Wed"></div>
+          <div class="bar" style="height: 85%" data-day="Thu"></div>
+          <div class="bar" style="height: 55%" data-day="Fri"></div>
+          <div class="bar" style="height: 75%" data-day="Sat"></div>
+          <div class="bar active" style="height: 90%" data-day="Sun"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>CHAT HISTORY</h3>
+        <div class="history-list">
+          <div class="history-item">
+            <span class="date">Today</span>
+            <p>How are you feeling today?</p>
+            <span class="tag calm">calm</span>
+          </div>
+          <div class="history-item">
+            <span class="date">Yesterday</span>
+            <p>I had a really tough day...</p>
+            <span class="tag anxious">anxious</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="nexus-main">
+      <header class="chat-header">
+        <div class="header-info">
+          <div class="avatar">🤖</div>
+          <div>
+            <h4>Moodverse AI</h4>
+            <p>Your emotional companion</p>
+          </div>
+        </div>
+        <button class="close-chat" onclick="toggleChat()">✕</button>
+      </header>
+
+      <div class="chat-messages" id="chat-flow">
+        <div class="msg bot">
+          <p>Hey! 👋 I'm your Moodverse AI companion. I'm here to help you understand your emotions. How are you feeling
+            today?</p>
+          <span class="time">Just now</span>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <input type="text" id="user-input" placeholder="Share how you're feeling...">
+        <button class="send-btn" id="send-trigger">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </div>
+    </main>
+  </div>
+
+<footer class="mood-footer">
+  <div class="footer-content">
+
+
+
+  <script src="assets/moodverse.js"></script>
+  <script>
+    // ── Init Navbar ──
+    NavBar.inject('home');
+    LangManager.apply();
+
+    // ── Emoji Selector ──
+    const MOODS = MoodHistory.MOODS;
+    let selectedMood = null;
+    let savedDoodle = null;
+
+    const emojiSelector = document.getElementById('emoji-selector');
+    const trackerControls = document.getElementById('tracker-controls');
+    const todayBanner = document.getElementById('today-banner');
+
+    MOODS.forEach(mood => {
+      const div = document.createElement('div');
+      div.className = 'emoji-option';
+      div.dataset.id = mood.id;
+      div.innerHTML = `<span class="opt-emoji">${mood.emoji}</span><span class="opt-label">${mood.label}</span>`;
+      div.addEventListener('click', () => {
+        selectedMood = mood.id;
+        document.querySelectorAll('.emoji-option').forEach(el => el.classList.toggle('selected', el.dataset.id === mood.id));
+        trackerControls.style.display = 'flex';
+        trackerControls.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+      emojiSelector.appendChild(div);
+    });
+
+    // ── Today's Entry ──
+    const todayEntry = MoodHistory.todayEntry();
+    if (todayEntry) showTodayBanner(todayEntry);
+
+    function showTodayBanner(entry) {
+      const meta = MOODS.find(m => m.id === entry.mood) || MOODS[0];
+      document.getElementById('today-emoji').textContent = meta.emoji;
+      document.getElementById('today-mood-label').textContent = meta.label;
+      todayBanner.style.display = 'flex';
+      emojiSelector.style.display = 'none';
+      trackerControls.style.display = 'none';
+    }
+
+    function resetTodayEntry() {
+      todayBanner.style.display = 'none';
+      emojiSelector.style.display = 'grid';
+      selectedMood = null;
+      savedDoodle = null;
+    }
+
+    // ── Save Entry ──
+    function saveEntry() {
+      if (!selectedMood) return;
+      const note = document.getElementById('mood-note').value;
+      MoodHistory.add(selectedMood, note, savedDoodle);
+      const meta = MOODS.find(m => m.id === selectedMood);
+      showToast(`${meta.emoji} ${meta.label} mood logged!`);
+      showTodayBanner({ mood: selectedMood });
+      document.getElementById('mood-note').value = '';
+      savedDoodle = null;
+      document.getElementById('doodle-preview').style.display = 'none';
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('save-toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ── Doodle Canvas ──
+    let doodleCanvas, ctx, drawing = false, currentColor = '#222';
+
+    function openDoodleModal() {
+      document.getElementById('doodle-modal').classList.add('open');
+      if (!doodleCanvas) initCanvas();
+    }
+
+    function initCanvas() {
+      doodleCanvas = document.getElementById('doodle-canvas');
+      ctx = doodleCanvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, doodleCanvas.width, doodleCanvas.height);
+
+      const getPos = (e) => {
+        const rect = doodleCanvas.getBoundingClientRect();
+        const scaleX = doodleCanvas.width / rect.width;
+        const scaleY = doodleCanvas.height / rect.height;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+      };
+
+      doodleCanvas.addEventListener('mousedown', (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+      doodleCanvas.addEventListener('mousemove', (e) => {
+        if (!drawing) return;
+        const p = getPos(e);
+        ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = parseInt(document.getElementById('brush-size').value);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+      });
+      doodleCanvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+      doodleCanvas.addEventListener('mouseleave', () => { drawing = false; ctx.beginPath(); });
+      doodleCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+      doodleCanvas.addEventListener('touchmove', (e) => {
+        if (!drawing) return; e.preventDefault();
+        const p = getPos(e);
+        ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = parseInt(document.getElementById('brush-size').value);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+      }, { passive: false });
+      doodleCanvas.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
+    }
+
+    function setColor(color, btn) {
+      currentColor = color;
+      document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function clearCanvas() {
+      if (!ctx) return;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, doodleCanvas.width, doodleCanvas.height);
+    }
+
+    function closeDoodle() { document.getElementById('doodle-modal').classList.remove('open'); }
+
+    function saveDoodleFromModal() {
+      if (!doodleCanvas) return;
+      savedDoodle = doodleCanvas.toDataURL('image/png');
+      document.getElementById('doodle-preview-img').src = savedDoodle;
+      document.getElementById('doodle-preview').style.display = 'block';
+      closeDoodle();
+      showToast('🎨 Doodle attached!');
+    }
+
+    function clearDoodle() {
+      savedDoodle = null;
+      document.getElementById('doodle-preview').style.display = 'none';
+    }
+
+    document.getElementById('doodle-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeDoodle();
+    });
+
+    // ── Language Change ──
+    document.addEventListener('langChange', () => {
+      const t = LangManager.t.bind(LangManager);
+      document.getElementById('tracker-heading').textContent = t('howAreYou');
+      document.getElementById('mood-note').placeholder = t('addNote');
+      document.querySelectorAll('.emoji-option').forEach(el => {
+        const id = el.dataset.id;
+        const label = el.querySelector('.opt-label');
+        if (label) label.textContent = t(id) || id;
+      });
+      NavBar.refreshNav();
+    });
+    const chatWrapper = document.getElementById('nexus-chat');
+    const triggerBtn = document.getElementById('nexus-trigger');
+    const userInput = document.getElementById('user-input');
+    const chatFlow = document.getElementById('chat-flow');
+    const sendBtn = document.getElementById('send-trigger');
+
+    // Toggle Chat Window
+    function toggleChat() {
+      chatWrapper.classList.toggle('active');
+    }
+
+    triggerBtn.addEventListener('click', toggleChat);
+
+    // Handle Sending Messages
+    function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      // Add User Message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'msg user';
+      userDiv.style.textAlign = 'right';
+      userDiv.style.marginBottom = '20px';
+      userDiv.innerHTML = `
+        <p style="background: var(--nexus-accent); display: inline-block; padding: 12px 16px; border-radius: 18px 18px 4px 18px; max-width: 80%; text-align: left;">${text}</p>
+    `;
+      chatFlow.appendChild(userDiv);
+
+      userInput.value = '';
+      chatFlow.scrollTop = chatFlow.scrollHeight;
+
+      // Simple Bot Reply Delay
+      setTimeout(() => {
+        const botDiv = document.createElement('div');
+        botDiv.className = 'msg bot';
+        botDiv.innerHTML = `<p>I'm listening. Tell me more about that...</p><span class="time">Just now</span>`;
+        chatFlow.appendChild(botDiv);
+        chatFlow.scrollTop = chatFlow.scrollHeight;
+      }, 1000);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // footer 
+    function subscribe() {
+  let email = document.getElementById("emailInput").value;
+
+  if(email === "") {
+    alert("Please enter your email!");
+  } else {
+    alert("Subscribed successfully 🎉");
+    document.getElementById("emailInput").value = "";
+  }
+}
+  </script>
+</body>
+
+</html>

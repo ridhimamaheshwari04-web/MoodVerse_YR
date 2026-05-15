@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relax — Moodverse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- FAVICON -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --deep: #0a3d62;
+      --mid: #1e6091;
+      --light: #e3f2fd;
+      --foam: #f0f9ff;
+      --muted: #607d8b;
+      --text: #1a2f3d;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(180deg, #d0eaf8 0%, #b3d9f0 30%, #e8f4fd 70%, #f0f9ff 100%);
+      min-height: 100vh; overflow-x: hidden; color: var(--text);
+    }
+
+    /* Waves */
+    .wave-bg {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 0; pointer-events: none;
+    }
+    .wave {
+      position: absolute; bottom: 0; width: 200%; height: 120px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50% 50% 0 0 / 80px 80px 0 0;
+    }
+    .wave1 { animation: wave 8s ease-in-out infinite; left: -50%; }
+    .wave2 { animation: wave 12s ease-in-out infinite reverse; bottom: 10px; opacity: 0.6; }
+    .wave3 { animation: wave 6s ease-in-out infinite; bottom: 20px; opacity: 0.4; }
+    @keyframes wave { 0%,100%{transform:translateX(0);} 50%{transform:translateX(25%);} }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 72px;
+      background: rgba(208,234,248,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(100,181,246,0.3);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--deep);
+      font-weight: 500; font-size: 0.9rem;
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(100,181,246,0.15);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-back:hover { background: rgba(100,181,246,0.3); transform: translateX(-3px); }
+    .nav-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-style: italic; color: var(--deep);
+      letter-spacing: 0.04em;
+    }
+    .nav-badge {
+      padding: 8px 20px; border-radius: 100px;
+      background: linear-gradient(135deg, #1e6091, #0288d1);
+      color: white; font-weight: 500; font-size: 0.85rem;
+      box-shadow: 0 4px 16px rgba(2,136,209,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center; padding: 80px 24px 60px;
+      position: relative; z-index: 1;
+    }
+    .hero-emoji {
+      font-size: 5rem; display: block; margin-bottom: 20px;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-18px);} }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 300; color: var(--deep);
+      letter-spacing: -0.02em; margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .hero h1 em { font-style: italic; color: var(--mid); }
+    .hero p {
+      font-size: 1rem; color: var(--muted); max-width: 460px; margin: 0 auto 40px;
+      line-height: 1.8; font-weight: 300;
+    }
+
+    /* ── BREATHING CIRCLE ── */
+    .breathing-widget {
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+      padding: 40px; background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(100,181,246,0.3);
+      border-radius: 28px; backdrop-filter: blur(12px);
+      max-width: 360px; margin: 0 auto 60px;
+      box-shadow: 0 12px 40px rgba(30,96,145,0.12);
+      position: relative; z-index: 1;
+    }
+    .breathing-widget h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--deep); font-weight: 400; }
+    .breath-circle {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(2,136,209,0.3), rgba(1,87,155,0.1));
+      border: 2px solid rgba(2,136,209,0.4);
+      animation: breathe 7s ease-in-out infinite;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+    @keyframes breathe {
+      0%,100%{transform:scale(1); box-shadow: 0 0 0 0 rgba(2,136,209,0.3);}
+      50%{transform:scale(1.35); box-shadow: 0 0 0 30px rgba(2,136,209,0);}
+    }
+    .breath-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; justify-content: center; gap: 12px; padding: 0 24px 48px; position: relative; z-index: 1; }
+    .tab-btn {
+      padding: 12px 28px; border-radius: 100px; border: 1px solid rgba(100,181,246,0.4);
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.9rem; background: rgba(255,255,255,0.6); color: var(--deep);
+      backdrop-filter: blur(8px); transition: all 0.3s;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #1e6091, #0288d1);
+      color: white; border-color: transparent;
+      box-shadow: 0 6px 20px rgba(2,136,209,0.35); transform: translateY(-2px);
+    }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.85); transform: translateY(-2px); }
+
+    /* ── CONTENT ── */
+    .content { display: none; padding: 0 48px 100px; position: relative; z-index: 1; }
+    .content.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
+    }
+    .gallery-item {
+      border-radius: 20px; overflow: hidden; aspect-ratio: 4/5;
+      box-shadow: 0 8px 30px rgba(30,96,145,0.15);
+      cursor: pointer; position: relative;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+    }
+    .gallery-item:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(30,96,145,0.25); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; filter: saturate(0.9) brightness(1.05); }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item .label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 24px 16px 16px;
+      background: linear-gradient(to top, rgba(10,61,98,0.7), transparent);
+      color: white; font-size: 0.85rem; font-weight: 500; opacity: 0; transition: opacity 0.3s;
+    }
+    .gallery-item:hover .label { opacity: 1; }
+
+    /* Sound cards */
+    .sounds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .sound-card {
+      padding: 28px; border-radius: 20px;
+      background: rgba(255,255,255,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(100,181,246,0.3);
+      cursor: pointer; transition: all 0.3s;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .sound-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(30,96,145,0.15); background: rgba(255,255,255,0.9); }
+    .sound-card.playing { border-color: #0288d1; box-shadow: 0 0 0 3px rgba(2,136,209,0.2); }
+    .sound-icon { font-size: 2.5rem; }
+    .sound-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--deep); font-weight: 400; }
+    .sound-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .sound-bar {
+      height: 4px; border-radius: 2px; background: rgba(100,181,246,0.2); overflow: hidden;
+    }
+    .sound-bar-fill {
+      height: 100%; background: linear-gradient(90deg, #0288d1, #4fc3f7);
+      width: 0%; transition: width 0.3s linear;
+      border-radius: 2px;
+    }
+    .sound-card.playing .sound-bar-fill { width: 100%; transition: width 30s linear; }
+    .sound-play-status {
+      font-size: 0.78rem; color: var(--muted); font-weight: 500; letter-spacing: 0.05em;
+    }
+    .sound-card.playing .sound-play-status { color: #0288d1; }
+
+    /* Affirmations */
+    .affirm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .affirm-card {
+      padding: 36px 28px; border-radius: 20px;
+      background: rgba(255,255,255,0.65); backdrop-filter: blur(12px);
+      border: 1px solid rgba(100,181,246,0.25);
+      text-align: center; transition: transform 0.3s;
+    }
+    .affirm-card:hover { transform: translateY(-4px); }
+    .affirm-icon { font-size: 2rem; margin-bottom: 16px; display: block; animation: float 4s ease-in-out infinite; }
+    .affirm-text { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--deep); line-height: 1.7; font-style: italic; font-weight: 400; }
+
+    /* Footer */
+    .page-footer {
+      border-top: 1px solid rgba(100,181,246,0.3);
+      padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+      position: relative; z-index: 1;
+    }
+    .footer-text { font-family: 'Cormorant Garamond', serif; color: var(--deep); font-size: 1rem; font-style: italic; }
+    .footer-moods { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mood-pill { padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 500; text-decoration: none; transition: transform 0.2s; border: 1px solid rgba(0,0,0,0.08); }
+    .mood-pill:hover { transform: translateY(-2px); }
+
+    @media (max-width: 768px) { nav,.content,.page-footer{padding-left:20px;padding-right:20px;} }
+  </style>
+</head>
+<body>
+
+<div class="wave-bg">
+  <div class="wave wave1"></div>
+  <div class="wave wave2"></div>
+  <div class="wave wave3"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-back">← Back</a>
+  <div class="nav-title">Relax &amp; Breathe</div>
+  <div class="nav-badge">🌊 Relax</div>
+</nav>
+
+<div class="hero">
+  <span class="hero-emoji">🌊</span>
+  <h1>Breathe. <em>Release.</em><br>Let go.</h1>
+  <p>Sometimes the bravest thing you can do is slow down. Let the gentle rhythm of this space ease your mind.</p>
+</div>
+
+<div class="breathing-widget">
+  <h3>Breathing Exercise</h3>
+  <div class="breath-circle">🌬️</div>
+  <div class="breath-label">Inhale 4s · Hold 4s · Exhale 7s</div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('wallpapers', this)">🖼️ Scenery</button>
+  <button class="tab-btn" onclick="showTab('sounds', this)">🎧 Sounds</button>
+  <button class="tab-btn" onclick="showTab('affirmations', this)">💙 Affirmations</button>
+  <button class="tab-btn" onclick="showTab('game', this)">🎮 Game</button>
+</div>
+
+<div id="wallpapers" class="content active">
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=21" alt="Relax scene"><div class="label">🏞️ Still Waters</div></div>
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=22" alt="Relax scene"><div class="label">🌅 Gentle Dusk</div></div>
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=23" alt="Relax scene"><div class="label">☁️ Soft Clouds</div></div>
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=24" alt="Relax scene"><div class="label">🌿 Green Peace</div></div>
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=25" alt="Relax scene"><div class="label">🏔️ Mountain Calm</div></div>
+    <div class="gallery-item"><img src="https://picsum.photos/400/500?random=26" alt="Relax scene"><div class="label">🌊 Ocean Drift</div></div>
+  </div>
+</div>
+
+<div id="sounds" class="content">
+  <div class="sounds-grid">
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🌧️</div>
+      <div class="sound-name">Gentle Rain</div>
+      <div class="sound-desc">Soft rainfall on leaves, perfect for deep focus or drifting off to sleep.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2519/2519-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🌊</div>
+      <div class="sound-name">Ocean Waves</div>
+      <div class="sound-desc">The rhythmic pulse of waves washing over smooth pebbles at twilight.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2516/2516-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🌲</div>
+      <div class="sound-name">Forest Breeze</div>
+      <div class="sound-desc">Wind through tall pine trees, birdsong, and the quiet hum of nature.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2520/2520-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🔥</div>
+      <div class="sound-name">Fireplace</div>
+      <div class="sound-desc">Crackling wood, warm embers — the most comforting sound in the world.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2521/2521-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🎐</div>
+      <div class="sound-name">Wind Chimes</div>
+      <div class="sound-desc">Delicate chimes in a gentle breeze. Clarity through simplicity.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+    <div class="sound-card"
+         data-src="https://assets.mixkit.co/active_storage/sfx/2517/2517-preview.mp3"
+         onclick="toggleSound(this)">
+      <div class="sound-icon">🌙</div>
+      <div class="sound-name">Night Crickets</div>
+      <div class="sound-desc">The peaceful chorus of summer night, under a sky full of stars.</div>
+      <div class="sound-bar"><div class="sound-bar-fill"></div></div>
+      <div class="sound-play-status">▶ Play karo</div>
+    </div>
+
+  </div>
+</div>
+
+<div id="affirmations" class="content">
+  <div class="affirm-grid">
+    <div class="affirm-card"><span class="affirm-icon">💙</span><p class="affirm-text">"I am exactly where I need to be. This moment is enough."</p></div>
+    <div class="affirm-card"><span class="affirm-icon">🌿</span><p class="affirm-text">"I release what I cannot control, and trust in the flow of life."</p></div>
+    <div class="affirm-card"><span class="affirm-icon">☁️</span><p class="affirm-text">"My mind is calm. My body is at peace. All is well."</p></div>
+    <div class="affirm-card"><span class="affirm-icon">🌊</span><p class="affirm-text">"Like the ocean, I am powerful, vast and always at rest beneath the waves."</p></div>
+    <div class="affirm-card"><span class="affirm-icon">✨</span><p class="affirm-text">"I deserve rest. Rest is not a reward — it is a necessity."</p></div>
+    <div class="affirm-card"><span class="affirm-icon">🌅</span><p class="affirm-text">"Every exhale is a release. Every inhale is a fresh beginning."</p></div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <div class="footer-text">✦ Moodverse</div>
+  <div class="footer-moods">
+    <a href="happy.html" class="mood-pill" style="background:#fff3e0;color:#795548;">😊 Happy</a>
+    <a href="relax.html" class="mood-pill" style="background:#e3f2fd;color:#1565c0;">🌊 Relax</a>
+    <a href="dark.html" class="mood-pill" style="background:#111;color:#00ffff;">🌙 Dark</a>
+    <a href="vintage.html" class="mood-pill" style="background:#efebe9;color:#4e342e;">🌻 Vintage</a>
+    <a href="productive.html" class="mood-pill" style="background:#ede7f6;color:#4527a0;">🏃 Productive</a>
+    <a href="mysterious.html" class="mood-pill" style="background:#1a1a2e;color:#d4c9ff;">🌌 Mysterious</a>
+  </div>
+</div>
+
+<!-- GAME: Zen Ripple Garden -->
+<div id="game" class="content">
+  <style>
+    .relax-game-wrap { max-width: 660px; margin: 0 auto; text-align: center; }
+    .relax-game-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; color: var(--deep); margin-bottom: 8px; }
+    .relax-game-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; font-weight: 300; line-height: 1.6; }
+    #zenCanvas { border-radius: 20px; border: 1px solid rgba(100,181,246,0.3); cursor: crosshair; display: block; margin: 0 auto 20px; box-shadow: 0 12px 40px rgba(30,96,145,0.15); width: 100%; max-width: 600px; }
+    .zen-controls { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .zen-color-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: 3px solid transparent; cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .zen-color-btn.active { border-color: white; transform: scale(1.2); }
+    .zen-action-btn {
+      padding: 10px 22px; border-radius: 100px; border: 1px solid rgba(100,181,246,0.4);
+      background: rgba(255,255,255,0.6); color: var(--deep); cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+      backdrop-filter: blur(8px); transition: all 0.2s;
+    }
+    .zen-action-btn:hover { background: rgba(255,255,255,0.9); }
+    .zen-score { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--muted); font-style: italic; }
+    .zen-instructions { font-size: 0.82rem; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+  </style>
+  <div class="relax-game-wrap">
+    <div class="relax-game-title">🌊 Zen Ripple Garden</div>
+    <div class="relax-game-desc">Click or drag anywhere on the water to create ripples. Find peace in the patterns.</div>
+    <canvas id="zenCanvas" width="600" height="380"></canvas>
+    <div class="zen-controls">
+      <button class="zen-color-btn active" style="background:radial-gradient(circle,#67e8f9,#0288d1)" onclick="setZenColor('ocean',this)" title="Ocean"></button>
+      <button class="zen-color-btn" style="background:radial-gradient(circle,#86efac,#16a34a)" onclick="setZenColor('forest',this)" title="Forest"></button>
+      <button class="zen-color-btn" style="background:radial-gradient(circle,#fda4af,#e11d48)" onclick="setZenColor('rose',this)" title="Rose"></button>
+      <button class="zen-color-btn" style="background:radial-gradient(circle,#fde68a,#d97706)" onclick="setZenColor('sunset',this)" title="Sunset"></button>
+      <button class="zen-color-btn" style="background:radial-gradient(circle,#c4b5fd,#7c3aed)" onclick="setZenColor('mystic',this)" title="Mystic"></button>
+      <button class="zen-action-btn" onclick="clearZen()">✦ Clear</button>
+      <button class="zen-action-btn" onclick="autoRipple()">🌊 Auto</button>
+    </div>
+    <div class="zen-score" id="zenMsg">Click the water to begin your practice…</div>
+    <div class="zen-instructions">Try holding the mouse down and moving slowly. Each ripple overlaps to create mandalas.</div>
+  </div>
+</div>
+
+<script>
+  /* ── TAB SWITCHING ── */
+  function showTab(id, btn) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    if (id === 'game') initZen();
+  }
+
+  /* ── SOUND PLAYER (FIXED) ── */
+  let relaxAudio = null;
+  let activeRelaxCard = null;
+
+  function toggleSound(card) {
+    const src = card.getAttribute('data-src');
+    const statusEl = card.querySelector('.sound-play-status');
+
+    // Same card clicked again → toggle pause/play
+    if (activeRelaxCard === card) {
+      if (relaxAudio.paused) {
+        relaxAudio.play();
+        card.classList.add('playing');
+        statusEl.textContent = '⏸ Pause karo';
+      } else {
+        relaxAudio.pause();
+        card.classList.remove('playing');
+        statusEl.textContent = '▶ Play karo';
+      }
+      return;
+    }
+
+    // Stop previous card if any
+    if (relaxAudio) {
+      relaxAudio.pause();
+      relaxAudio.currentTime = 0;
+      if (activeRelaxCard) {
+        activeRelaxCard.classList.remove('playing');
+        const prevStatus = activeRelaxCard.querySelector('.sound-play-status');
+        if (prevStatus) prevStatus.textContent = '▶ Play karo';
+      }
+    }
+
+    // Play new card
+    relaxAudio = new Audio(src);
+    relaxAudio.loop = true;
+    relaxAudio.volume = 0.75;
+
+    relaxAudio.play().then(() => {
+      card.classList.add('playing');
+      statusEl.textContent = '⏸ Pause karo';
+    }).catch(() => {
+      statusEl.textContent = '⚠ Load nahi hua';
+    });
+
+    activeRelaxCard = card;
+  }
+
+  /* ── ZEN RIPPLE GAME ── */
+  let zenCanvas, zenCtx, ripples = [], zenRunning = false, autoInterval = null;
+  let rippleCount = 0;
+  const ZEN_PALETTES = {
+    ocean:  ['rgba(103,232,249,', 'rgba(2,136,209,',  'rgba(186,230,253,'],
+    forest: ['rgba(134,239,172,', 'rgba(22,163,74,',  'rgba(187,247,208,'],
+    rose:   ['rgba(253,164,175,', 'rgba(225,29,72,',  'rgba(254,205,211,'],
+    sunset: ['rgba(253,230,138,', 'rgba(217,119,6,',  'rgba(254,243,199,'],
+    mystic: ['rgba(196,181,253,', 'rgba(124,58,237,', 'rgba(221,214,254,'],
+  };
+  let currentPalette = ZEN_PALETTES.ocean;
+
+  function setZenColor(name, btn) {
+    currentPalette = ZEN_PALETTES[name];
+    document.querySelectorAll('.zen-color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function initZen() {
+    if (zenRunning) return;
+    zenCanvas = document.getElementById('zenCanvas');
+    zenCtx = zenCanvas.getContext('2d');
+    zenRunning = true;
+    drawZenBg();
+    let isDown = false;
+    zenCanvas.addEventListener('mousedown', e => { isDown = true; addRipple(e); });
+    zenCanvas.addEventListener('mousemove', e => { if (isDown) addRipple(e, true); });
+    zenCanvas.addEventListener('mouseup', () => isDown = false);
+    zenCanvas.addEventListener('touchstart', e => { e.preventDefault(); addRipple(e.touches[0]); }, { passive: false });
+    zenCanvas.addEventListener('touchmove',  e => { e.preventDefault(); addRipple(e.touches[0], true); }, { passive: false });
+    requestAnimationFrame(zenLoop);
+  }
+
+  function drawZenBg() {
+    const grd = zenCtx.createLinearGradient(0, 0, 0, zenCanvas.height);
+    grd.addColorStop(0, '#d0eaf8'); grd.addColorStop(1, '#e8f4fd');
+    zenCtx.fillStyle = grd;
+    zenCtx.fillRect(0, 0, zenCanvas.width, zenCanvas.height);
+  }
+
+  function addRipple(e, drag = false) {
+    if (drag && Math.random() > 0.4) return;
+    const rect = zenCanvas.getBoundingClientRect();
+    const scaleX = zenCanvas.width / rect.width, scaleY = zenCanvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX, y = (e.clientY - rect.top) * scaleY;
+    ripples.push({ x, y, r: 0, maxR: 80 + Math.random() * 120, alpha: 0.7, speed: 1.2 + Math.random() * 1.5, color: currentPalette[Math.floor(Math.random() * currentPalette.length)] });
+    rippleCount++;
+    if (rippleCount % 10 === 0) document.getElementById('zenMsg').textContent = `${rippleCount} ripples created… breathe. 🌊`;
+  }
+
+  function clearZen() {
+    ripples = []; rippleCount = 0;
+    drawZenBg();
+    document.getElementById('zenMsg').textContent = 'Canvas cleared. Begin again…';
+    stopAutoRipple();
+  }
+
+  function autoRipple() {
+    if (autoInterval) { stopAutoRipple(); return; }
+    autoInterval = setInterval(() => {
+      if (!zenCanvas) return;
+      const x = Math.random() * zenCanvas.width, y = Math.random() * zenCanvas.height;
+      const pal = Object.values(ZEN_PALETTES)[Math.floor(Math.random() * 5)];
+      ripples.push({ x, y, r: 0, maxR: 60 + Math.random() * 100, alpha: 0.5, speed: 1 + Math.random(), color: pal[0] });
+    }, 600);
+    document.getElementById('zenMsg').textContent = 'Auto-ripple mode active… let it flow 🌿';
+  }
+
+  function stopAutoRipple() { clearInterval(autoInterval); autoInterval = null; }
+
+  function zenLoop() {
+    if (!zenRunning) return;
+    zenCtx.fillStyle = 'rgba(208,234,248,0.18)';
+    zenCtx.fillRect(0, 0, zenCanvas.width, zenCanvas.height);
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const rp = ripples[i];
+      rp.r += rp.speed; rp.alpha -= 0.012;
+      if (rp.alpha <= 0) { ripples.splice(i, 1); continue; }
+      for (let k = 0; k < 3; k++) {
+        const kr = rp.r - (k * 18); if (kr < 0) continue;
+        zenCtx.beginPath();
+        zenCtx.arc(rp.x, rp.y, kr, 0, Math.PI * 2);
+        zenCtx.strokeStyle = rp.color + (rp.alpha * (1 - k * 0.3)).toFixed(2) + ')';
+        zenCtx.lineWidth = 2 - k * 0.5;
+        zenCtx.stroke();
+      }
+    }
+    requestAnimationFrame(zenLoop);
+  }
+</script>
+
+</body>
+</html>

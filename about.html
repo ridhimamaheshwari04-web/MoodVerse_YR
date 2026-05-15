@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Moodverse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%237c6dfa%22 opacity=%220.3%22/><text y=%22.9em%22 x=%22.1em%22 font-size=%2270%22>✦</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0f; --surface: #12121a; --border: rgba(255,255,255,0.07);
+      --text: #f0eff8; --muted: #7c7c9a; --accent: #7c6dfa;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.6;
+    }
+
+    main { padding-top: 68px; }
+
+    /* Hero */
+    .about-hero {
+      padding: 100px 48px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .about-hero .orb {
+      position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none;
+    }
+    .orb-a { width: 500px; height: 500px; background: rgba(124,109,250,0.18); top: -100px; left: 50%; transform: translateX(-50%); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px;
+      border-radius: 100px; border: 1px solid rgba(124,109,250,0.4);
+      background: rgba(124,109,250,0.08); font-size: 0.78rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #c4b5fd; margin-bottom: 28px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: #7c6dfa; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+    .about-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: -0.02em;
+      line-height: 1.1; margin-bottom: 20px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .about-hero h1 em { font-style: italic; color: #c4b5fd; }
+    .about-hero p {
+      color: var(--muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto;
+      line-height: 1.8; animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    /* Section layout */
+    .section { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 3rem); letter-spacing: -0.02em; margin-bottom: 20px; }
+
+    /* Mission */
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; border-top: 1px solid var(--border); padding-top: 80px; }
+    .mission-text p { color: var(--muted); line-height: 1.85; margin-bottom: 14px; font-size: 0.95rem; }
+    .mission-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .stat-card {
+      padding: 28px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface);
+      animation: fadeUp 0.6s ease both;
+    }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.2s; }
+    .stat-card:nth-child(4) { animation-delay: 0.3s; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700;
+      background: linear-gradient(135deg, #c4b5fd, #7c6dfa);
+      /* -webkit-background-clip: text; -webkit-text-fill-color: transparent; */
+    }
+    .stat-label { color: var(--muted); font-size: 0.82rem; margin-top: 4px; }
+
+    /* Features */
+    .features-section { padding: 80px 48px; border-top: 1px solid var(--border); }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+    .feature-card {
+      padding: 32px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(124,109,250,0.3); }
+    .feature-icon { font-size: 2.2rem; margin-bottom: 16px; }
+    .feature-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    /* Team / Why section */
+    .why-section { padding: 80px 48px; border-top: 1px solid var(--border); }
+    .why-content { max-width: 700px; }
+    .why-content p { color: var(--muted); line-height: 1.9; font-size: 0.97rem; margin-bottom: 16px; }
+    .blockquote {
+      border-left: 3px solid var(--accent); padding-left: 24px; margin: 32px 0;
+      font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #c4b5fd;
+      line-height: 1.7;
+    }
+
+    /* CTA */
+    .cta-section {
+      margin: 0 48px 80px; border-radius: 28px; padding: 64px;
+      background: linear-gradient(135deg, rgba(124,109,250,0.12), rgba(196,181,253,0.06));
+      border: 1px solid rgba(124,109,250,0.2); text-align: center;
+    }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); letter-spacing: -0.02em; margin-bottom: 16px; }
+    .cta-section p { color: var(--muted); margin-bottom: 32px; line-height: 1.7; }
+    .btn-primary {
+      display: inline-block; padding: 14px 36px; border-radius: 100px;
+      background: linear-gradient(135deg, #7c6dfa, #a78bfa); color: #fff;
+      font-weight: 500; font-size: 0.95rem; text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 30px rgba(124,109,250,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124,109,250,0.45); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    /* .footer-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; background: linear-gradient(135deg, #c4b5fd, #7c6dfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } */
+    .footer-copy { color: var(--muted); font-size: 0.8rem; }
+
+    @media (max-width: 900px) {
+      .about-hero { padding: 80px 24px 60px; }
+      .section, .features-section, .why-section, .cta-section { padding: 60px 24px; }
+      .mission-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cta-section { margin: 0 24px 60px; padding: 40px 24px; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <!-- ABOUT HERO -->
+  <section class="about-hero">
+    <div class="orb orb-a"></div>
+    <div class="hero-badge"><span></span> <span data-i18n="aboutTitle">About Moodverse</span></div>
+    <h1>Where feelings<br><em>find their home.</em></h1>
+    <p>Moodverse is a mental wellness companion that helps you understand, track, and celebrate your emotional journey — one day at a time.</p>
+  </section>
+
+  <!-- MISSION -->
+  <div class="section">
+    <div class="mission-grid">
+      <div class="mission-text">
+        <div class="section-label">Our Mission</div>
+        <h2 class="section-title">Emotions deserve<br>to be understood</h2>
+        <p>We believe emotional awareness is the foundation of mental well-being. Moodverse gives you the tools to check in with yourself daily, track patterns over time, and receive gentle, intelligent insights.</p>
+        <p>It's not therapy — it's a mirror. A beautiful, data-driven mirror that helps you see yourself more clearly.</p>
+        <a href="index.html" class="btn-primary" style="margin-top: 20px; display: inline-block;">Start Tracking Free</a>
+      </div>
+      <div class="mission-visual">
+        <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Mood States</div></div>
+        <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Days to Track</div></div>
+        <div class="stat-card"><div class="stat-num">🔥</div><div class="stat-label">Daily Streaks</div></div>
+        <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Judgements</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+    <div style="max-width:1100px; margin: 0 auto;">
+      <div class="section-label">What we offer</div>
+      <h2 class="section-title">Everything you need for<br>emotional clarity</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">😊</div>
+          <h3>Mood Selector</h3>
+          <p>Choose from 8 emotional states with a beautiful interactive UI. Smooth animations make logging feel like a ritual, not a chore.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Weekly Analytics</h3>
+          <p>Visual charts show your mood trends over the week. Understand your emotional patterns and spot what lifts you up.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔥</div>
+          <h3>Streak System</h3>
+          <p>Build a daily habit with streak tracking. Every consecutive day you log your mood strengthens your self-awareness practice.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Mood Doodles</h3>
+          <p>Sometimes words aren't enough. Draw your feelings on a canvas and save doodles with your daily entries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Daily Reminders</h3>
+          <p>Set a custom time for your daily check-in. Browser notifications gently remind you to pause and reflect.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Insights</h3>
+          <p>Intelligent, context-aware suggestions based on your mood history. Not generic — personalized to your patterns.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>History Log</h3>
+          <p>Every entry saved with date, mood, notes, and doodle. Scroll back through your emotional journey any time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌏</div>
+          <h3>Multilingual</h3>
+          <p>Available in English and Hindi, with more languages coming. Your wellness journey in the language you think in.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>6 Mood Themes</h3>
+          <p>Immersive aesthetic experiences — Happy, Relax, Dark, Vintage, Productive, Mysterious. Pick the world that fits your vibe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why-section">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div class="section-label">Why Moodverse</div>
+      <div class="why-content">
+        <h2 class="section-title">A space that<br><em style="font-family:'Playfair Display';color:#c4b5fd;">actually cares.</em></h2>
+        <div class="blockquote">"The way something looks should match the way you feel. Not the other way around."</div>
+        <p>Mental health apps often feel clinical, sterile, or overwhelming. Moodverse was built differently — starting from the belief that aesthetic beauty and emotional care aren't opposites. They amplify each other.</p>
+        <p>When you open an app that feels beautiful and intentional, you're more likely to show up. And showing up — even for 60 seconds — is what builds self-awareness over time.</p>
+        <p>We're not here to diagnose, analyze, or judge. We're here to help you witness your own emotional life with curiosity and compassion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section" style="max-width:1100px; margin: 0 auto 80px; border-radius:28px; padding:64px; background:linear-gradient(135deg,rgba(124,109,250,0.12),rgba(196,181,253,0.06)); border:1px solid rgba(124,109,250,0.2); text-align:center;">
+    <div class="section-label">Get started</div>
+    <h2 class="section-title" style="margin-bottom:16px;">Ready to understand<br>yourself better?</h2>
+    <p style="color:var(--muted);margin-bottom:32px;line-height:1.7;max-width:400px;margin-left:auto;margin-right:auto;">Join Moodverse free. No credit card. No judgment. Just you, your moods, and a beautiful space to exist.</p>
+    <a href="login.html?mode=signup" class="btn-primary">Create Free Account</a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-logo">✦ Moodverse</div>
+  <div class="footer-copy">© 2025 Moodverse. Feel everything.</div>
+</footer>
+
+<script src="assets/moodverse.js"></script>
+<script>
+  NavBar.inject('about');
+  LangManager.apply();
+</script>
+</body>
+</html>

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mysterious — Moodverse</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- FAVICON -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --indigo: #6c5ce7;
+      --violet: #a29bfe;
+      --gold: #fdcb6e;
+      --bg: #04040f;
+      --surface: #080820;
+      --card: #0c0c28;
+      --border: rgba(108, 92, 231, 0.2);
+      --text: #e8e0ff;
+      --muted: #6b6390;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'EB Garamond', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Cosmic bg */
+    #cosmos {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108, 92, 231, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 100%, rgba(162, 155, 254, 0.07) 0%, transparent 70%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(4, 4, 15, 0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-back {
+      text-decoration: none;
+      color: var(--violet);
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(108, 92, 231, 0.08);
+      transition: all 0.2s;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    .nav-back:hover {
+      background: rgba(108, 92, 231, 0.15);
+    }
+
+    .nav-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--violet);
+      text-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+    }
+
+    .nav-badge {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid rgba(108, 92, 231, 0.5);
+      background: rgba(108, 92, 231, 0.12);
+      color: var(--violet);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-symbol {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 30px rgba(108, 92, 231, 0.8));
+      animation: orbitGlow 6s ease-in-out infinite;
+    }
+
+    @keyframes orbitGlow {
+
+      0%,
+      100% {
+        transform: rotate(-5deg) scale(1);
+        filter: drop-shadow(0 0 20px rgba(108, 92, 231, 0.6));
+      }
+
+      50% {
+        transform: rotate(5deg) scale(1.05);
+        filter: drop-shadow(0 0 40px rgba(162, 155, 254, 0.9));
+      }
+    }
+
+    .hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-shadow: 0 0 40px rgba(108, 92, 231, 0.5);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .hero-divider-line {
+      flex: 1;
+      max-width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--indigo));
+    }
+
+    .hero-divider-line.right {
+      background: linear-gradient(90deg, var(--indigo), transparent);
+    }
+
+    .hero-rune {
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+
+    .hero p {
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.8;
+    }
+
+    /* ── ORACLE ── */
+    .oracle-widget {
+      max-width: 480px;
+      margin: 0 auto 60px;
+      padding: 40px;
+      background: rgba(108, 92, 231, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(12px);
+    }
+
+    .oracle-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 20px;
+    }
+
+    .oracle-question {
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 60px;
+      margin-bottom: 24px;
+      transition: opacity 0.4s;
+    }
+
+    .oracle-btn {
+      padding: 12px 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(108, 92, 231, 0.5);
+      background: rgba(108, 92, 231, 0.12);
+      color: var(--violet);
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+
+    .oracle-btn:hover {
+      background: rgba(108, 92, 231, 0.25);
+      box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 24px 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-btn {
+      padding: 10px 24px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(108, 92, 231, 0.04);
+      color: var(--muted);
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background: rgba(108, 92, 231, 0.18);
+      color: var(--violet);
+      border-color: rgba(108, 92, 231, 0.5);
+      box-shadow: 0 0 20px rgba(108, 92, 231, 0.15);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: rgba(108, 92, 231, 0.1);
+      color: var(--text);
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      display: none;
+      padding: 0 48px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content.active {
+      display: block;
+      animation: mystReveal 0.6s ease;
+    }
+
+    @keyframes mystReveal {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.99);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.4s;
+    }
+
+    .gallery-item:hover {
+      border-color: rgba(108, 92, 231, 0.6);
+      box-shadow: 0 0 40px rgba(108, 92, 231, 0.2);
+      transform: translateY(-6px);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.5) brightness(0.7) hue-rotate(180deg);
+      transition: all 0.5s;
+    }
+
+    .gallery-item:hover img {
+      filter: saturate(0.8) brightness(0.9) hue-rotate(200deg);
+    }
+
+    .gallery-veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(4, 4, 15, 0.7), transparent);
+    }
+
+    .gallery-rune {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      color: var(--violet);
+      letter-spacing: 0.2em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-rune {
+      opacity: 1;
+    }
+
+    /* Prophecies */
+    .prophecy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .prophecy-card {
+      padding: 36px 28px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(108, 92, 231, 0.04);
+      backdrop-filter: blur(8px);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prophecy-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(108, 92, 231, 0.6), transparent);
+    }
+
+    .prophecy-card:hover {
+      border-color: rgba(108, 92, 231, 0.4);
+      box-shadow: 0 0 30px rgba(108, 92, 231, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .prophecy-symbol {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.5));
+    }
+
+    .prophecy-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 16px;
+    }
+
+    .prophecy-text {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* Constellation */
+    .constellation-wrap {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    canvas#constellation {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      width: 100%;
+      display: block;
+      background: #020210;
+    }
+
+    .constellation-note {
+      text-align: center;
+      margin-top: 16px;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--violet);
+      text-transform: uppercase;
+    }
+
+    .footer-moods {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mood-pill {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mood-pill:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+
+      nav,
+      .content,
+      .page-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cosmos"></div>
+
+  <nav>
+    <a href="index.html" class="nav-back">← Return</a>
+    <div class="nav-title">The Veil</div>
+    <div class="nav-badge">🌌 Mysterious</div>
+  </nav>
+
+  <div class="hero">
+    <span class="hero-symbol">🔮</span>
+    <h1>Beyond<br>the Veil</h1>
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <span class="hero-rune">✦</span>
+      <div class="hero-divider-line right"></div>
+    </div>
+    <p>Some truths exist only in the shadow between what is known and what is felt. Step into the mystery.</p>
+  </div>
+
+  <div class="oracle-widget">
+    <div class="oracle-title">✦ The Oracle Speaks ✦</div>
+    <div class="oracle-question" id="oracleText">"What seeks your attention most is what you have been avoiding."</div>
+    <button class="oracle-btn" onclick="newOracle()">Seek Wisdom →</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('gallery', this)">Visions</button>
+    <button class="tab-btn" onclick="showTab('prophecies', this)">Prophecies</button>
+    <button class="tab-btn" onclick="showTab('stars', this)">Stars</button>
+    <button class="tab-btn" onclick="showTab('game', this)">Ritual</button>
+  </div>
+
+  <div id="gallery" class="content active">
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=41" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION I</div>
+      </div>
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=42" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION II</div>
+      </div>
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=43" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION III</div>
+      </div>
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=44" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION IV</div>
+      </div>
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=45" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION V</div>
+      </div>
+      <div class="gallery-item"><img src="https://picsum.photos/400/500?random=46" alt="">
+        <div class="gallery-veil"></div>
+        <div class="gallery-rune">VISION VI</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="prophecies" class="content">
+    <div class="prophecy-grid">
+      <div class="prophecy-card"><span class="prophecy-symbol">🌑</span>
+        <div class="prophecy-title">The Dark Moon</div>
+        <p class="prophecy-text">"What is hidden is not lost. It waits in the dark for the right moment to be revealed."
+        </p>
+      </div>
+      <div class="prophecy-card"><span class="prophecy-symbol">🌊</span>
+        <div class="prophecy-title">The Deep Water</div>
+        <p class="prophecy-text">"Still water runs deepest. The quietest soul carries the greatest weight — and the
+          greatest strength."</p>
+      </div>
+      <div class="prophecy-card"><span class="prophecy-symbol">🕯️</span>
+        <div class="prophecy-title">The Single Flame</div>
+        <p class="prophecy-text">"One flame is enough to read by. Do not wait for the whole sun before you begin."</p>
+      </div>
+      <div class="prophecy-card"><span class="prophecy-symbol">🗝️</span>
+        <div class="prophecy-title">The Ancient Key</div>
+        <p class="prophecy-text">"Every locked door was locked by someone. That means it can be unlocked. You already
+          hold the key."</p>
+      </div>
+      <div class="prophecy-card"><span class="prophecy-symbol">🌫️</span>
+        <div class="prophecy-title">The Mist</div>
+        <p class="prophecy-text">"Walk into the fog without demanding clarity. The path reveals itself only to the one
+          in motion."</p>
+      </div>
+      <div class="prophecy-card"><span class="prophecy-symbol">⭐</span>
+        <div class="prophecy-title">The Fallen Star</div>
+        <p class="prophecy-text">"To fall is not to fail. The star that falls leaves a trail of light across the whole
+          dark sky."</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="stars" class="content">
+    <div class="constellation-wrap">
+      <canvas id="constellation" width="800" height="400"></canvas>
+      <div class="constellation-note">Move your cursor across the stars to form constellations.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-text">✦ Moodverse</div>
+    <div class="footer-moods">
+      <a href="happy.html" class="mood-pill" style="background:#1a1200;color:#ffb300;">😊 Happy</a>
+      <a href="relax.html" class="mood-pill" style="background:#001a2c;color:#4fc3f7;">🌊 Relax</a>
+      <a href="dark.html" class="mood-pill" style="background:#000;color:#00ffff;">🌙 Dark</a>
+      <a href="vintage.html" class="mood-pill" style="background:#1a0f0a;color:#d7ccc8;">🌻 Vintage</a>
+      <a href="productive.html" class="mood-pill" style="background:#0f0b1e;color:#a78bfa;">🏃 Productive</a>
+      <a href="mysterious.html" class="mood-pill"
+        style="background:#04040f;color:#a29bfe;border-color:rgba(108,92,231,0.4);">🌌 Mysterious</a>
+    </div>
+  </div>
+
+  <!-- GAME: Arcane Memory -->
+  <div id="game" class="content">
+    <style>
+      .myst-game-wrap {
+        max-width: 620px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .myst-game-title {
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 1.5rem;
+        color: var(--violet);
+        margin-bottom: 6px;
+        text-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+      }
+
+      .myst-game-desc {
+        font-style: italic;
+        color: var(--muted);
+        margin-bottom: 28px;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        font-family: 'EB Garamond', serif;
+      }
+
+      .myst-hud {
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .myst-hud-box {
+        border: 1px solid var(--border);
+        padding: 10px 18px;
+        border-radius: 8px;
+        background: rgba(108, 92, 231, 0.05);
+        min-width: 80px;
+      }
+
+      .myst-hud-val {
+        font-family: 'Cinzel', serif;
+        font-size: 1.5rem;
+        color: var(--violet);
+        text-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+      }
+
+      .myst-hud-lbl {
+        font-family: 'EB Garamond', serif;
+        font-size: 0.75rem;
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      #tarotGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .tarot-card {
+        aspect-ratio: 2/3;
+        border-radius: 12px;
+        cursor: pointer;
+        perspective: 600px;
+        position: relative;
+      }
+
+      .tarot-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .tarot-card.flipped .tarot-inner {
+        transform: rotateY(180deg);
+      }
+
+      .tarot-card.matched .tarot-inner {
+        transform: rotateY(180deg);
+      }
+
+      .tarot-face,
+      .tarot-back {
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .tarot-back {
+        background: linear-gradient(135deg, #0c0c28, #1a1040);
+        border: 1px solid var(--border);
+        background-image: repeating-linear-gradient(45deg, rgba(108, 92, 231, 0.06) 0px, rgba(108, 92, 231, 0.06) 1px, transparent 1px, transparent 8px),
+          repeating-linear-gradient(-45deg, rgba(108, 92, 231, 0.06) 0px, rgba(108, 92, 231, 0.06) 1px, transparent 1px, transparent 8px);
+      }
+
+      .tarot-back-symbol {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.7));
+      }
+
+      .tarot-face {
+        transform: rotateY(180deg);
+        background: linear-gradient(135deg, #110d30, #1e1645);
+        border: 1px solid rgba(108, 92, 231, 0.4);
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .tarot-symbol {
+        font-size: 2.2rem;
+        filter: drop-shadow(0 0 12px rgba(108, 92, 231, 0.8));
+      }
+
+      .tarot-name {
+        font-family: 'Cinzel', serif;
+        font-size: 0.55rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--violet);
+      }
+
+      .tarot-card.matched .tarot-face {
+        background: linear-gradient(135deg, rgba(108, 92, 231, 0.3), rgba(162, 155, 254, 0.15));
+        border-color: rgba(162, 155, 254, 0.6);
+        box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .tarot-card.shake .tarot-inner {
+        animation: cardShake 0.3s ease;
+      }
+
+      @keyframes cardShake {
+
+        0%,
+        100% {
+          transform: rotateY(180deg);
+        }
+
+        20%,
+        60% {
+          transform: rotateY(180deg) translateX(-4px);
+        }
+
+        40%,
+        80% {
+          transform: rotateY(180deg) translateX(4px);
+        }
+      }
+
+      .myst-msg {
+        font-family: 'EB Garamond', serif;
+        font-style: italic;
+        font-size: 1rem;
+        color: var(--muted);
+        min-height: 28px;
+        margin-bottom: 16px;
+      }
+
+      .myst-game-btn {
+        padding: 12px 32px;
+        border-radius: 8px;
+        border: 1px solid rgba(108, 92, 231, 0.5);
+        background: rgba(108, 92, 231, 0.12);
+        color: var(--violet);
+        cursor: pointer;
+        font-family: 'Cinzel', serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        transition: all 0.3s;
+      }
+
+      .myst-game-btn:hover {
+        background: rgba(108, 92, 231, 0.25);
+        box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+      }
+
+      .myst-level-badge {
+        display: inline-block;
+        padding: 6px 18px;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        color: var(--gold);
+        margin-bottom: 16px;
+        background: rgba(253, 203, 110, 0.06);
+      }
+    </style>
+    <div class="myst-game-wrap">
+      <div class="myst-game-title">The Arcane Memory</div>
+      <div class="myst-game-desc">The cards shift and hide their secrets. Find each matching pair before the arcane
+        power fades from your mind.</div>
+      <div class="myst-hud">
+        <div class="myst-hud-box">
+          <div class="myst-hud-val" id="mPairs">0</div>
+          <div class="myst-hud-lbl">Pairs Found</div>
+        </div>
+        <div class="myst-hud-box">
+          <div class="myst-hud-val" id="mFlips">0</div>
+          <div class="myst-hud-lbl">Flips</div>
+        </div>
+        <div class="myst-hud-box">
+          <div class="myst-hud-val" id="mTimer">0s</div>
+          <div class="myst-hud-lbl">Time</div>
+        </div>
+      </div>
+      <div class="myst-level-badge" id="mLevelBadge">✦ The First Veil ✦</div>
+      <div id="tarotGrid"></div>
+      <div class="myst-msg" id="mMsg">Click a card to reveal what lies beneath…</div>
+      <button class="myst-game-btn" onclick="initTarot()">✦ New Ritual</button>
+    </div>
+  </div>
+
+  <script>
+    // Stars
+    const cosmos = document.getElementById('cosmos');
+    for (let i = 0; i < 180; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2.5;
+      star.style.cssText = `width:${size}px;height:${size}px;top:${Math.random() * 100}%;left:${Math.random() * 100}%;opacity:${0.1 + Math.random() * 0.8};animation:twinkle ${2 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 4}s alternate;`;
+      cosmos.appendChild(star);
+    }
+    const twinkleStyle = document.createElement('style');
+    twinkleStyle.textContent = '@keyframes twinkle{from{opacity:0.1;}to{opacity:0.9;}}';
+    document.head.appendChild(twinkleStyle);
+
+    function showTab(id, btn) {
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+      if (id === 'stars') initConstellation();
+    }
+
+    const oracles = [
+      "\"What seeks your attention most is what you have been avoiding.\"",
+      "\"The answer was never in the asking — it was in the silence after.\"",
+      "\"You are not lost. You are between two knowings.\"",
+      "\"The thing you cannot explain is the most real thing about you.\"",
+      "\"Trust the pull. The tide knows where it is going.\"",
+      "\"In the deepest dark, the smallest light is enough.\"",
+      "\"What returns to you has not finished its lesson.\"",
+      "\"Your intuition arrived before your understanding. Listen to it.\"",
+      "\"You are the mystery you seek.\"",
+      "\"Everything unfinished is still speaking.\""
+    ];
+    let lastOracle = 0;
+    function newOracle() {
+      const el = document.getElementById('oracleText');
+      el.style.opacity = 0;
+      setTimeout(() => { lastOracle = (lastOracle + 1) % oracles.length; el.textContent = oracles[lastOracle]; el.style.opacity = 1; }, 300);
+      el.style.transition = 'opacity 0.3s';
+    }
+
+    function initConstellation() {
+      const canvas = document.getElementById('constellation');
+      if (!canvas || canvas.dataset.init) return;
+      canvas.dataset.init = '1';
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const stars = Array.from({ length: 60 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2 }));
+      let mouse = { x: -999, y: -999 };
+      canvas.addEventListener('mousemove', e => { const rect = canvas.getBoundingClientRect(); mouse.x = (e.clientX - rect.left) * (W / rect.width); mouse.y = (e.clientY - rect.top) * (H / rect.height); });
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        stars.forEach(s => {
+          const dx = s.x - mouse.x, dy = s.y - mouse.y, dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) { stars.forEach(s2 => { const d = Math.sqrt((s.x - s2.x) ** 2 + (s.y - s2.y) ** 2); if (d < 100 && d > 0) { ctx.beginPath(); ctx.strokeStyle = `rgba(162,155,254,${0.3 * (1 - d / 100)})`; ctx.lineWidth = 0.5; ctx.moveTo(s.x, s.y); ctx.lineTo(s2.x, s2.y); ctx.stroke(); } }); }
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r * (dist < 80 ? 1.6 : 1), 0, Math.PI * 2); ctx.fillStyle = `rgba(162,155,254,${dist < 80 ? 0.9 : 0.35})`; ctx.fill();
+          if (dist < 80) { ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(108,92,231,0.15)'; ctx.fill(); }
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // ── ARCANE MEMORY GAME ──
+    const TAROT_CARDS = [
+      { symbol: '🌙', name: 'The Moon' }, { symbol: '⭐', name: 'The Star' },
+      { symbol: '☀️', name: 'The Sun' }, { symbol: '🔮', name: 'The Oracle' },
+      { symbol: '🦅', name: 'The Eagle' }, { symbol: '🐍', name: 'The Serpent' },
+      { symbol: '🌊', name: 'The Tide' }, { symbol: '🕯️', name: 'The Flame' },
+    ];
+    const LEVEL_NAMES = ['✦ The First Veil ✦', '✦ The Second Veil ✦', '✦ The Third Veil ✦', '✦ Beyond the Veil ✦'];
+    let mCards = [], mFlipped = [], mPairs = 0, mFlipCount = 0, mLocked = false, mLevel = 0, mTimerVal = 0, mTimerInt = null, mStarted = false;
+
+    function initTarot() {
+      clearInterval(mTimerInt); mTimerVal = 0; mStarted = false; mFlipCount = 0; mPairs = 0; mFlipped = []; mLocked = false;
+      document.getElementById('mPairs').textContent = 0;
+      document.getElementById('mFlips').textContent = 0;
+      document.getElementById('mTimer').textContent = '0s';
+      document.getElementById('mLevelBadge').textContent = LEVEL_NAMES[Math.min(mLevel, LEVEL_NAMES.length - 1)];
+      const pairs = Math.min(4 + mLevel, 8);
+      const chosen = [...TAROT_CARDS].sort(() => Math.random() - 0.5).slice(0, pairs);
+      mCards = [...chosen, ...chosen].sort(() => Math.random() - 0.5).map((c, i) => ({ ...c, id: i, matched: false, flipped: false }));
+      renderTarot();
+      document.getElementById('mMsg').textContent = 'Reveal two cards. Find their twin in the arcane spread.';
+    }
+
+    function renderTarot() {
+      const grid = document.getElementById('tarotGrid');
+      const cols = mCards.length <= 8 ? 4 : 4;
+      grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+      grid.innerHTML = '';
+      mCards.forEach((card, i) => {
+        const el = document.createElement('div');
+        el.className = 'tarot-card' + (card.flipped ? ' flipped' : '') + (card.matched ? ' matched' : '');
+        el.innerHTML = `<div class="tarot-inner"><div class="tarot-back"><div class="tarot-back-symbol">✦</div></div><div class="tarot-face"><div class="tarot-symbol">${card.symbol}</div><div class="tarot-name">${card.name}</div></div></div>`;
+        el.onclick = () => flipTarot(i, el);
+        grid.appendChild(el);
+      });
+    }
+
+    function flipTarot(i, el) {
+      if (mLocked || mCards[i].flipped || mCards[i].matched) return;
+      if (!mStarted) { mStarted = true; mTimerInt = setInterval(() => { mTimerVal++; document.getElementById('mTimer').textContent = mTimerVal + 's'; }, 1000); }
+      mCards[i].flipped = true; el.classList.add('flipped');
+      mFlipped.push({ idx: i, el });
+      mFlipCount++; document.getElementById('mFlips').textContent = mFlipCount;
+      if (mFlipped.length === 2) { mLocked = true; setTimeout(checkTarotMatch, 800); }
+    }
+
+    function checkTarotMatch() {
+      const [a, b] = mFlipped;
+      if (mCards[a.idx].symbol === mCards[b.idx].symbol) {
+        mCards[a.idx].matched = mCards[b.idx].matched = true;
+        a.el.classList.add('matched'); b.el.classList.add('matched');
+        mPairs++; document.getElementById('mPairs').textContent = mPairs;
+        const revelations = ['The veil lifts…', 'A connection revealed.', 'The cosmos aligns.', 'Ancient bonds remembered.', 'Your memory grows stronger.'];
+        document.getElementById('mMsg').textContent = revelations[Math.floor(Math.random() * revelations.length)];
+        if (mPairs === mCards.length / 2) { setTimeout(() => { clearInterval(mTimerInt); mLevel++; document.getElementById('mMsg').textContent = `✦ All pairs revealed in ${mTimerVal}s with ${mFlipCount} flips. The next veil awaits…`; }, 400); }
+      } else {
+        a.el.classList.remove('flipped'); b.el.classList.remove('flipped');
+        a.el.classList.add('shake'); b.el.classList.add('shake');
+        mCards[a.idx].flipped = mCards[b.idx].flipped = false;
+        document.getElementById('mMsg').textContent = 'These do not share the same mystery…';
+        setTimeout(() => { a.el.classList.remove('shake'); b.el.classList.remove('shake'); }, 350);
+      }
+      mFlipped = []; mLocked = false;
+    }
+
+    initTarot();
+  </script>
+
+
+</body>
+
+</html>

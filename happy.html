@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy — Moodverse</title>
+
+  <!-- CREATIVE GLOWING FAVICON -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><filter id='g'><feGaussianBlur stdDeviation='5'/></filter><text y=%22.9em%22 font-size=%2280%22 fill=%22%23FFB300%22 filter='url(%23g)'>😊</text><text y=%22.9em%22 font-size=%2280%22 fill=%22%23FF7043%22>😊</text></svg>">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap"
+    rel="stylesheet">
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --sun: #FFB300;
+      --peach: #FF7043;
+      --cream: #FFF8E7;
+      --brown: #5D4037;
+      --light: #FFF3E0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(160deg, #fff9e6 0%, #ffe0b2 50%, #ffccbc 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--brown);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 70px;
+      background: rgba(255, 248, 231, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 2px solid rgba(255, 179, 0, 0.2);
+    }
+
+    .nav-back {
+      text-decoration: none;
+      color: var(--brown);
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: rgba(255, 179, 0, 0.15);
+      transition: 0.3s;
+    }
+
+    .nav-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.4rem;
+      color: var(--peach);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      background: white;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--sun), var(--peach));
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .content {
+      display: none;
+      padding: 0 20px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── WALLPAPERS GRID ── */
+    .wallpaper-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .wp-item {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      cursor: pointer;
+      height: 350px;
+    }
+
+    .wp-item:hover {
+      transform: scale(1.03);
+    }
+
+    .wp-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── SONGS GRID ── */
+    .songs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
+    .song-card {
+      padding: 15px;
+      border-radius: 20px;
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .song-card.playing {
+      border-color: var(--sun);
+      background: #fffcf0;
+    }
+
+    .song-info {
+      flex: 1;
+    }
+
+    .song-info strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .song-info small {
+      color: #a1887f;
+    }
+
+    .play-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: none;
+      background: var(--peach);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Visualizer */
+    .playing-visualizer {
+      display: none;
+      align-items: flex-end;
+      gap: 3px;
+      height: 15px;
+    }
+
+    .song-card.playing .playing-visualizer {
+      display: flex;
+    }
+
+    .v-bar {
+      width: 3px;
+      background: var(--sun);
+      animation: equalize 0.8s infinite;
+    }
+
+    @keyframes equalize {
+
+      0%,
+      100% {
+        height: 5px;
+      }
+
+      50% {
+        height: 15px;
+      }
+    }
+
+    /* ── QUOTE SECTION ── */
+    .quote-box {
+      background: white;
+      padding: 40px;
+      border-radius: 30px;
+      text-align: center;
+      border-left: 8px solid var(--sun);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      max-width: 700px;
+      margin: 20px auto;
+    }
+
+    .quote-text {
+      font-size: 1.5rem;
+      font-style: italic;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    .quote-author {
+      font-weight: 900;
+      color: var(--peach);
+      letter-spacing: 1px;
+    }
+
+    /* ── GAME AREA ── */
+    .game-wrap {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .game-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      color: var(--peach);
+      margin-bottom: 6px;
+    }
+
+    .game-subtitle {
+      font-size: 0.85rem;
+      color: #a1887f;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: white;
+      border-radius: 16px;
+      padding: 10px 22px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+      min-width: 80px;
+    }
+
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--brown);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #a1887f;
+      margin-top: 2px;
+    }
+
+    .combo-msg {
+      font-family: 'Pacifico', cursive;
+      font-size: 1rem;
+      color: var(--peach);
+      min-height: 26px;
+      margin-bottom: 8px;
+      transition: opacity 0.3s;
+    }
+
+    #emojiGrid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 24px;
+      margin-bottom: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      position: relative;
+    }
+
+    .emoji-cell {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 7px;
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.2s;
+      will-change: transform;
+    }
+
+    .emoji-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      transition: transform 0.2s;
+    }
+
+    .emoji-cell:hover {
+      transform: scale(1.07);
+      background: white;
+    }
+
+    .emoji-cell.selected {
+      background: white;
+      box-shadow: 0 0 0 3px var(--peach);
+      z-index: 10;
+      transform: scale(1.12);
+    }
+
+    .emoji-cell.matched {
+      animation: popJuice 0.45s ease-out forwards;
+    }
+
+    .emoji-cell.drop-in {
+      animation: dropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popJuice {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      40% {
+        transform: scale(1.35);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes dropIn {
+      0% {
+        transform: translateY(-60px) scale(0.6);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .new-game-btn {
+      padding: 14px 40px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      background: linear-gradient(135deg, var(--sun), var(--peach));
+      color: white;
+      box-shadow: 0 6px 20px rgba(255, 112, 67, 0.4);
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .new-game-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(255, 112, 67, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-back">← Back</a>
+    <div class="nav-title">Happy Mood</div>
+    <div></div>
+  </nav>
+
+  <div class="hero">
+    <h1>Hello, Happy Soul! 😊</h1>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('wallpapers', this)">🖼️ 12 Wallpapers</button>
+    <button class="tab-btn" onclick="showTab('songs', this)">🎵 Songs</button>
+    <button class="tab-btn" onclick="showTab('quotes', this)">💛 Daily Quotes</button>
+    <button class="tab-btn" onclick="showTab('game', this)">🎮 Swapping Game</button>
+  </div>
+
+  <!-- WALLPAPERS -->
+  <div id="wallpapers" class="content active">
+    <div class="wallpaper-grid">
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=500&q=80"></div>
+      <div class="wp-item"><img
+          src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=500&q=80"></div>
+    </div>
+  </div>
+
+  <!-- SONGS -->
+  <div id="songs" class="content">
+    <div class="songs-container">
+      <!-- Song 1 -->
+      <div class="song-card" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', this)">
+        <div class="song-info"><strong>Sunshine Morning</strong><br><small>SoundHelix Track 1</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+      <!-- Song 2 -->
+      <div class="song-card" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', this)">
+        <div class="song-info"><strong>Golden Vibes</strong><br><small>SoundHelix Track 2</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+      <!-- Song 3 -->
+      <div class="song-card" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', this)">
+        <div class="song-info"><strong>Happy Flow</strong><br><small>SoundHelix Track 3</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+      <!-- Song 4 -->
+      <div class="song-card" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', this)">
+        <div class="song-info"><strong>Summer Dance</strong><br><small>SoundHelix Track 4</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+      <!-- Song 5 -->
+      <div class="song-card" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', this)">
+        <div class="song-info"><strong>Pure Serotonin</strong><br><small>SoundHelix Track 8</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+      <!-- Song 6 -->
+      <div class="song-card"
+        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3', this)">
+        <div class="song-info"><strong>Bright Sky</strong><br><small>SoundHelix Track 10</small></div>
+        <div class="playing-visualizer">
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+          <div class="v-bar"></div>
+        </div>
+        <button class="play-btn">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTES -->
+  <div id="quotes" class="content">
+    <div class="quote-box">
+      <div class="quote-text" id="randomQuote">"Loading your happy dose..."</div>
+      <div class="quote-author" id="quoteAuthor">- Moodverse</div>
+    </div>
+    <p style="text-align:center; color: var(--peach); font-weight: 800; cursor: pointer;" onclick="showRandomQuote()">🔄
+      Tap for another quote</p>
+  </div>
+
+  <!-- GAME -->
+  <div id="game" class="content">
+    <div class="game-wrap">
+      <div class="game-title">😊 Emoji Pop!</div>
+      <div class="game-subtitle">Match 3+ of the same emoji in a row or column. Click two adjacent emojis to swap!</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-val" id="gScore">0</div>
+          <div class="stat-lbl">SCORE</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="gMoves">20</div>
+          <div class="stat-lbl">MOVES</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="gLevel">1</div>
+          <div class="stat-lbl">LEVEL</div>
+        </div>
+      </div>
+      <div class="combo-msg" id="comboMsg"></div>
+      <div id="emojiGrid"></div>
+      <button class="new-game-btn" onclick="initEmojiGame()">🔄 New Game</button>
+    </div>
+  </div>
+
+  <script>
+    // Tab Logic
+    function showTab(id, btn) {
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Quotes Logic
+    const quotes = [
+      { text: "Happiness is not something ready-made. It comes from your own actions.", author: "Dalai Lama" },
+      { text: "The most wasted of all days is one without laughter.", author: "E.E. Cummings" },
+      { text: "Count your age by friends, not years. Count your life by smiles, not tears.", author: "John Lennon" },
+      { text: "For every minute you are angry you lose sixty seconds of happiness.", author: "Ralph Waldo Emerson" },
+      { text: "Happiness is a warm puppy.", author: "Charles M. Schulz" },
+      { text: "The only thing that will make you happy is being happy with who you are.", author: "Goldie Hawn" },
+      { text: "Be happy for this moment. This moment is your life.", author: "Omar Khayyam" }
+    ];
+
+    function showRandomQuote() {
+      const q = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('randomQuote').textContent = `"${q.text}"`;
+      document.getElementById('quoteAuthor').textContent = `- ${q.author}`;
+    }
+
+    // Music Logic
+    let currentAudio = null;
+    function playMusic(url, card) {
+      if (currentAudio && currentAudio.src === url) {
+        if (currentAudio.paused) { currentAudio.play(); card.classList.add('playing'); }
+        else { currentAudio.pause(); card.classList.remove('playing'); }
+        return;
+      }
+      if (currentAudio) { currentAudio.pause(); document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing')); }
+      currentAudio = new Audio(url);
+      currentAudio.play();
+      card.classList.add('playing');
+    }
+
+    // Game Logic (Full Match-3 with Score, Moves, Level)
+    const ASSETS = [
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.png', // 🚀 Rocket
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.png', // 🌟 Glowing Star
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/1fa90/512.png', // 🪐 Planet
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/2604_fe0f/512.png', // ☄️ Comet
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/1f319/512.png', // 🌙 Moon
+      'https://fonts.gstatic.com/s/e/notoemoji/latest/1f47e/512.png', // 👾 Alien
+    ];
+    const COLS = 6, ROWS = 6;
+    let board = [], selected = null, isProcessing = false;
+    let score = 0, moves = 20, level = 1;
+
+    const COMBO_MSGS = ['Amazing! ✨', 'Sweet! 🍬', 'Awesome! 🌈', 'Great! 🌟', 'Lovely! 💛', 'Superb! 🎉'];
+
+    function initEmojiGame() {
+      isProcessing = false; selected = null;
+      score = 0; moves = 20; level = 1;
+      updateStats();
+      clearMsg();
+      board = Array.from({ length: ROWS }, () =>
+        Array.from({ length: COLS }, () => ASSETS[Math.floor(Math.random() * ASSETS.length)])
+      );
+      // Make sure no initial matches
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          while (hasMatchAt(r, c)) {
+            board[r][c] = ASSETS[Math.floor(Math.random() * ASSETS.length)];
+          }
+        }
+      }
+      renderBoard();
+    }
+
+    function hasMatchAt(r, c) {
+      const v = board[r][c];
+      if (c >= 2 && board[r][c - 1] === v && board[r][c - 2] === v) return true;
+      if (r >= 2 && board[r - 1][c] === v && board[r - 2][c] === v) return true;
+      return false;
+    }
+
+    function updateStats() {
+      document.getElementById('gScore').textContent = score;
+      document.getElementById('gMoves').textContent = moves;
+      document.getElementById('gLevel').textContent = level;
+    }
+
+    function showMsg(txt) {
+      const el = document.getElementById('comboMsg');
+      el.textContent = txt; el.style.opacity = 1;
+      clearTimeout(el._t);
+      el._t = setTimeout(() => { el.style.opacity = 0; }, 1400);
+    }
+
+    function clearMsg() {
+      const el = document.getElementById('comboMsg');
+      el.textContent = ''; el.style.opacity = 0;
+    }
+
+    function renderBoard(dropRows) {
+      const grid = document.getElementById('emojiGrid');
+      grid.innerHTML = '';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'emoji-cell';
+          cell.id = `cell-${r}-${c}`;
+          if (dropRows && dropRows.has(`${r}-${c}`)) cell.classList.add('drop-in');
+          if (board[r][c]) {
+            const img = document.createElement('img');
+            img.src = board[r][c];
+            cell.appendChild(img);
+          }
+          cell.onclick = () => handleCellClick(r, c, cell);
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    async function handleCellClick(r, c, cell) {
+      if (isProcessing || moves <= 0) return;
+      if (!selected) {
+        selected = { r, c, el: cell }; cell.classList.add('selected');
+      } else {
+        if (selected.r === r && selected.c === c) {
+          selected.el.classList.remove('selected'); selected = null; return;
+        }
+        const dr = Math.abs(r - selected.r), dc = Math.abs(c - selected.c);
+        if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+          isProcessing = true;
+          selected.el.classList.remove('selected');
+          await doSwap(selected.r, selected.c, r, c);
+          const matched = findMatches();
+          if (matched.size === 0) {
+            // swap back
+            await doSwap(r, c, selected.r, selected.c);
+          } else {
+            moves--;
+            await processMatches(matched);
+          }
+          updateStats();
+          isProcessing = false; selected = null;
+          checkGameOver();
+        } else {
+          selected.el.classList.remove('selected');
+          selected = { r, c, el: cell }; cell.classList.add('selected');
+        }
+      }
+    }
+
+    async function doSwap(r1, c1, r2, c2) {
+      const el1 = document.getElementById(`cell-${r1}-${c1}`);
+      const el2 = document.getElementById(`cell-${r2}-${c2}`);
+      if (!el1 || !el2) return;
+      const dx = el2.offsetLeft - el1.offsetLeft, dy = el2.offsetTop - el1.offsetTop;
+      el1.style.transition = 'transform 0.32s cubic-bezier(0.34,1.56,0.64,1)';
+      el2.style.transition = 'transform 0.32s cubic-bezier(0.34,1.56,0.64,1)';
+      el1.style.transform = `translate(${dx}px,${dy}px)`;
+      el2.style.transform = `translate(${-dx}px,${-dy}px)`;
+      await sleep(340);
+      let tmp = board[r1][c1]; board[r1][c1] = board[r2][c2]; board[r2][c2] = tmp;
+      renderBoard();
+    }
+
+    function findMatches() {
+      const matched = new Set();
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS - 2; c++) {
+          const v = board[r][c];
+          if (v && board[r][c + 1] === v && board[r][c + 2] === v) {
+            let e = c + 2;
+            while (e + 1 < COLS && board[r][e + 1] === v) e++;
+            for (let k = c; k <= e; k++) matched.add(`${r}-${k}`);
+          }
+        }
+      }
+      for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS - 2; r++) {
+          const v = board[r][c];
+          if (v && board[r + 1][c] === v && board[r + 2][c] === v) {
+            let e = r + 2;
+            while (e + 1 < ROWS && board[e + 1][c] === v) e++;
+            for (let k = r; k <= e; k++) matched.add(`${k}-${c}`);
+          }
+        }
+      }
+      return matched;
+    }
+
+    async function processMatches(matched) {
+      const pts = matched.size * 10;
+      score += pts;
+      showMsg(COMBO_MSGS[Math.floor(Math.random() * COMBO_MSGS.length)] + ` +${pts}`);
+      // Animate pop
+      matched.forEach(key => {
+        const el = document.getElementById(`cell-${key}`);
+        if (el) el.classList.add('matched');
+      });
+      await sleep(450);
+      // Remove matched cells
+      matched.forEach(key => {
+        const [r, c] = key.split('-').map(Number);
+        board[r][c] = null;
+      });
+      // Drop down
+      const dropRows = new Set();
+      for (let c = 0; c < COLS; c++) {
+        let empty = ROWS - 1;
+        for (let r = ROWS - 1; r >= 0; r--) {
+          if (board[r][c] !== null) { board[empty][c] = board[r][c]; if (empty !== r) { board[r][c] = null; dropRows.add(`${empty}-${c}`); } empty--; }
+        }
+        for (let r = empty; r >= 0; r--) { board[r][c] = ASSETS[Math.floor(Math.random() * ASSETS.length)]; dropRows.add(`${r}-${c}`); }
+      }
+      renderBoard(dropRows);
+      await sleep(450);
+      // Check chain
+      const next = findMatches();
+      if (next.size > 0) { await processMatches(next); }
+      // Level up every 200 pts
+      level = Math.floor(score / 200) + 1;
+    }
+
+    function checkGameOver() {
+      if (moves <= 0) {
+        setTimeout(() => {
+          showMsg(`Game Over! Final Score: ${score} 🎉`);
+        }, 200);
+      }
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // Init
+    window.onload = () => {
+      showRandomQuote();
+      initEmojiGame();
+    };
+  </script>
+</body>
+
+</html>

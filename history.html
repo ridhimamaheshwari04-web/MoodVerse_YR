@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History — Moodverse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg:#0a0a0f; --surface:#12121a; --border:rgba(255,255,255,0.07); --text:#f0eff8; --muted:#7c7c9a; --accent:#7c6dfa; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.6; }
+
+    main { padding-top: 68px; }
+    .page-header { padding: 60px 48px 40px; }
+    .section-label { font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; font-weight:500; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.5rem); letter-spacing:-0.02em; }
+    .page-title em { font-style:italic; color:#c4b5fd; }
+
+    .content-grid { max-width:1200px; margin:0 auto; padding:0 48px 80px; display:grid; grid-template-columns:1fr 360px; gap:32px; }
+
+    /* Charts */
+    .chart-section { }
+    .card {
+      background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px;
+      margin-bottom:24px;
+    }
+    .card-title { font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:700; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
+    .card-title span { color:var(--muted); font-size:0.85rem; font-weight:400; }
+
+    /* Week bar */
+    .week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+    .week-day { text-align:center; }
+    .week-label { font-size:0.72rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+    .week-bar-wrap { height:80px; display:flex; align-items:flex-end; justify-content:center; margin-bottom:8px; }
+    .week-bar { width:32px; border-radius:6px 6px 0 0; transition:height 0.5s cubic-bezier(0.22,1,0.36,1); min-height:4px; position:relative; }
+    .week-bar::after { content:attr(data-emoji); position:absolute; top:-28px; left:50%; transform:translateX(-50%); font-size:1.2rem; }
+    .week-emoji { font-size:1.4rem; display:block; margin-bottom:4px; }
+    .week-date { font-size:0.7rem; color:var(--muted); }
+
+    /* AI Insight */
+    .insight-card {
+      background:linear-gradient(135deg,rgba(124,109,250,0.12),rgba(196,181,253,0.06));
+      border:1px solid rgba(124,109,250,0.25); border-radius:20px; padding:24px; margin-bottom:24px;
+    }
+    .insight-label { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:#c4b5fd; margin-bottom:10px; }
+    .insight-text { color:var(--text); line-height:1.7; font-size:0.92rem; }
+    .week-score { margin-top:16px; }
+    .score-label { font-size:0.8rem; color:var(--muted); margin-bottom:8px; }
+    .score-bar { height:8px; background:rgba(255,255,255,0.08); border-radius:100px; overflow:hidden; }
+    .score-fill { height:100%; background:linear-gradient(90deg,#7c6dfa,#c4b5fd); border-radius:100px; transition:width 1s ease; }
+
+    /* History list */
+    .history-list { display:flex; flex-direction:column; gap:16px; }
+    .entry-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px 24px;
+      display:flex; align-items:flex-start; gap:16px;
+      transition:transform 0.2s, border-color 0.2s;
+      animation:fadeUp 0.4s ease both;
+    }
+    .entry-card:hover { transform:translateX(4px); border-color:rgba(124,109,250,0.2); }
+    .entry-emoji { font-size:2rem; flex-shrink:0; line-height:1; }
+    .entry-body { flex:1; min-width:0; }
+    .entry-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .entry-mood { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:0.95rem; }
+    .entry-date { font-size:0.78rem; color:var(--muted); }
+    .entry-note { color:var(--muted); font-size:0.86rem; line-height:1.5; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .entry-doodle-thumb { width:48px; height:48px; border-radius:8px; object-fit:cover; border:1px solid var(--border); flex-shrink:0; cursor:pointer; }
+
+    .empty-state { text-align:center; padding:64px 24px; color:var(--muted); }
+    .empty-state .empty-icon { font-size:3rem; margin-bottom:16px; }
+    .empty-state p { margin-bottom:20px; }
+
+    /* Sidebar */
+    .sidebar { }
+    .streak-card {
+      background:linear-gradient(135deg,rgba(255,140,0,0.15),rgba(255,100,0,0.06));
+      border:1px solid rgba(255,140,0,0.25); border-radius:20px; padding:24px; margin-bottom:24px; text-align:center;
+    }
+    .streak-fire { font-size:3rem; display:block; margin-bottom:8px; }
+    .streak-num { font-family:'Space Grotesk',sans-serif; font-size:3rem; font-weight:700; color:#ffad47; line-height:1; }
+    .streak-label { color:var(--muted); font-size:0.85rem; margin-top:4px; }
+    .streak-note { font-size:0.78rem; color:#ffad47; margin-top:8px; opacity:0.8; }
+
+    /* Reminder */
+    .reminder-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:24px; }
+    .reminder-card .card-title { margin-bottom:16px; }
+    .time-input {
+      width:100%; padding:11px 14px; border-radius:10px;
+      background:rgba(255,255,255,0.04); border:1px solid var(--border);
+      color:var(--text); font-size:0.95rem; font-family:'DM Sans',sans-serif;
+      margin-bottom:12px;
+    }
+    .time-input:focus { outline:none; border-color:rgba(124,109,250,0.5); }
+    .btn-sm {
+      width:100%; padding:11px; border-radius:100px; border:none;
+      background:linear-gradient(135deg,#7c6dfa,#a78bfa); color:#fff;
+      font-size:0.88rem; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif;
+      transition:transform 0.2s;
+    }
+    .btn-sm:hover { transform:translateY(-1px); }
+    .reminder-status { font-size:0.8rem; color:#7c6dfa; margin-top:8px; text-align:center; display:none; }
+
+    /* Doodle modal */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:2000;
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none; transition:opacity 0.2s;
+    }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal {
+      background:#16161f; border:1px solid rgba(255,255,255,0.12); border-radius:24px;
+      padding:32px; max-width:500px; width:90%; transform:scale(0.95); transition:transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform:scale(1); }
+    .modal img { width:100%; border-radius:12px; }
+    .modal-close { display:block; margin:16px auto 0; padding:10px 24px; border-radius:100px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+    @media(max-width:900px){ .content-grid{grid-template-columns:1fr;padding:0 24px 60px;} .page-header{padding:40px 24px 24px;} }
+  </style>
+</head>
+<body>
+<main>
+  <div class="page-header">
+    <div class="section-label">Your Journey</div>
+    <h1 class="page-title">Mood <em>History</em></h1>
+  </div>
+
+  <div class="content-grid">
+    <!-- LEFT: Charts + History -->
+    <div class="chart-section">
+      <!-- Weekly Chart -->
+      <div class="card">
+        <div class="card-title">📅 Weekly Overview <span data-i18n="weeklyInsights"></span></div>
+        <div class="week-grid" id="week-grid"><!-- JS filled --></div>
+      </div>
+
+      <!-- Chart.js Line Chart -->
+      <div class="card">
+        <div class="card-title">📈 Mood Trends</div>
+        <canvas id="mood-chart" height="120"></canvas>
+      </div>
+
+      <!-- Mood Frequency Pie -->
+      <div class="card">
+        <div class="card-title">🥧 Mood Frequency</div>
+        <div style="max-width:300px;margin:0 auto;">
+          <canvas id="freq-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- AI Insight -->
+      <div class="insight-card">
+        <div class="insight-label">🤖 AI Insight</div>
+        <p class="insight-text" id="ai-insight">Loading your insights...</p>
+        <div class="week-score">
+          <div class="score-label">Wellness Score this week</div>
+          <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+          <div style="text-align:right;font-size:0.8rem;color:var(--muted);margin-top:4px;" id="score-pct">-</div>
+        </div>
+      </div>
+
+      <!-- History List -->
+      <div class="card">
+        <div class="card-title" data-i18n="moodHistory">Mood History</div>
+        <div class="history-list" id="history-list"><!-- JS filled --></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div class="sidebar">
+      <!-- Streak -->
+      <div class="streak-card">
+        <span class="streak-fire">🔥</span>
+        <div class="streak-num" id="streak-num">0</div>
+        <div class="streak-label" data-i18n="yourStreak">Day Streak</div>
+        <div class="streak-note" id="streak-note"></div>
+      </div>
+
+      <!-- Reminder -->
+      <div class="reminder-card">
+        <div class="card-title">🔔 Daily Reminder</div>
+        <input type="time" class="time-input" id="reminder-time" value="20:00">
+        <button class="btn-sm" onclick="saveReminder()">Set Reminder</button>
+        <div class="reminder-status" id="reminder-status"></div>
+      </div>
+
+      <!-- Mood Summary -->
+      <div class="card">
+        <div class="card-title">📊 This Week's Stats</div>
+        <div id="week-stats" style="display:grid;gap:12px;"><!-- JS filled --></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Doodle Modal -->
+<div class="modal-overlay" id="doodle-modal">
+  <div class="modal">
+    <h3 style="font-family:'Space Grotesk',sans-serif;margin-bottom:16px;">🎨 Your Doodle</h3>
+    <img id="modal-doodle-img" src="" alt="Mood doodle">
+    <button class="modal-close" onclick="closeDoodleModal()">Close</button>
+  </div>
+</div>
+
+<script src="assets/moodverse.js"></script>
+<script>
+NavBar.inject('history');
+LangManager.apply();
+
+// ── Require auth (soft — show guest view if no user) ──
+const user = Auth.user;
+
+// ── Load Data ──
+const entries = MoodHistory.getAll();
+const streak = StreakManager.check();
+const weekData = MoodHistory.getWeekData();
+
+// ── Streak Display ──
+document.getElementById('streak-num').textContent = streak.count;
+if (streak.count === 0) {
+  document.getElementById('streak-note').textContent = 'Log today to start your streak!';
+} else if (streak.count === 1) {
+  document.getElementById('streak-note').textContent = "Great start! Keep it up tomorrow 💪";
+} else {
+  document.getElementById('streak-note').textContent = `${streak.count} days strong! Don't break it 🌟`;
+}
+
+// ── Reminder ──
+const savedReminder = ReminderManager.get();
+if (savedReminder) document.getElementById('reminder-time').value = savedReminder;
+
+function saveReminder() {
+  const t = document.getElementById('reminder-time').value;
+  if (!t) return;
+  ReminderManager.set(t);
+  const status = document.getElementById('reminder-status');
+  status.textContent = `Reminder set for ${t} ✓`;
+  status.style.display = 'block';
+  setTimeout(() => status.style.display = 'none', 3000);
+}
+
+// ── Weekly Grid ──
+const moodMeta = MoodHistory.MOODS;
+function getMoodMeta(id) { return moodMeta.find(m => m.id === id) || { emoji: '😐', color: '#888', label: id }; }
+
+const weekGrid = document.getElementById('week-grid');
+weekData.forEach(day => {
+  const meta = day.entry ? getMoodMeta(day.entry.mood) : null;
+  const heightPct = meta ? 80 : 4;
+  weekGrid.innerHTML += `
+    <div class="week-day">
+      <div class="week-label">${day.label}</div>
+      <div class="week-bar-wrap">
+        <div class="week-bar" style="height:${heightPct}px;background:${meta?.color || 'rgba(255,255,255,0.08)'};" data-emoji="${meta?.emoji || ''}"></div>
+      </div>
+      <div class="week-date">${day.date.slice(5)}</div>
+    </div>`;
+});
+
+// ── Chart.js: Mood Line Chart ──
+const scoreMap = { happy:5, excited:5, calm:4, neutral:3, tired:2, anxious:2, sad:1, angry:1 };
+const weekLabels = weekData.map(d => d.label);
+const weekScores = weekData.map(d => d.entry ? (scoreMap[d.entry.mood] || 3) : null);
+
+const moodChartCtx = document.getElementById('mood-chart').getContext('2d');
+new Chart(moodChartCtx, {
+  type: 'line',
+  data: {
+    labels: weekLabels,
+    datasets: [{
+      label: 'Mood Score',
+      data: weekScores,
+      borderColor: '#7c6dfa',
+      backgroundColor: 'rgba(124,109,250,0.1)',
+      pointBackgroundColor: '#c4b5fd',
+      pointRadius: 6, pointHoverRadius: 8,
+      fill: true, tension: 0.4,
+      spanGaps: true
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { min: 0, max: 6, ticks: { color: '#7c7c9a', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      x: { ticks: { color: '#7c7c9a' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── Chart.js: Frequency Pie ──
+const moodCounts = {};
+entries.slice(0, 30).forEach(e => { moodCounts[e.mood] = (moodCounts[e.mood] || 0) + 1; });
+const freqLabels = Object.keys(moodCounts).map(k => getMoodMeta(k).emoji + ' ' + (getMoodMeta(k).label));
+const freqData = Object.values(moodCounts);
+const freqColors = Object.keys(moodCounts).map(k => getMoodMeta(k).color);
+
+if (freqLabels.length) {
+  const freqCtx = document.getElementById('freq-chart').getContext('2d');
+  new Chart(freqCtx, {
+    type: 'doughnut',
+    data: { labels: freqLabels, datasets: [{ data: freqData, backgroundColor: freqColors, borderWidth: 0 }] },
+    options: {
+      plugins: {
+        legend: { labels: { color: '#7c7c9a', font: { size: 12 } } }
+      }
+    }
+  });
+} else {
+  document.getElementById('freq-chart').closest('.card').innerHTML = '<div class="card-title">🥧 Mood Frequency</div><div style="color:var(--muted);font-size:0.9rem;text-align:center;padding:20px;">Log some moods to see your frequency chart!</div>';
+}
+
+// ── AI Insight ──
+document.getElementById('ai-insight').textContent = AIInsights.generate(entries);
+const score = AIInsights.getWeekScore(weekData.filter(d => d.entry).map(d => d.entry));
+setTimeout(() => {
+  document.getElementById('score-fill').style.width = score + '%';
+  document.getElementById('score-pct').textContent = score + '/100';
+}, 300);
+
+// ── Week Stats Sidebar ──
+const weekEntries = weekData.filter(d => d.entry).map(d => d.entry);
+const weekStatsEl = document.getElementById('week-stats');
+if (weekEntries.length === 0) {
+  weekStatsEl.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No entries this week yet</p>';
+} else {
+  const dominantMood = Object.entries(
+    weekEntries.reduce((acc, e) => { acc[e.mood] = (acc[e.mood] || 0) + 1; return acc; }, {})
+  ).sort((a,b) => b[1]-a[1])[0];
+  const meta = getMoodMeta(dominantMood[0]);
+  weekStatsEl.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;">
+      <span style="font-size:0.85rem;color:var(--muted);">Days logged</span>
+      <span style="font-weight:700;color:#c4b5fd;">${weekEntries.length}/7</span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;">
+      <span style="font-size:0.85rem;color:var(--muted);">Dominant mood</span>
+      <span style="font-weight:700;">${meta.emoji} ${meta.label}</span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;">
+      <span style="font-size:0.85rem;color:var(--muted);">Wellness score</span>
+      <span style="font-weight:700;color:#7c6dfa;">${score}/100</span>
+    </div>`;
+}
+
+// ── History List ──
+const historyList = document.getElementById('history-list');
+if (!entries.length) {
+  historyList.innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <p data-i18n="noHistory">No entries yet. Start tracking!</p>
+      <a href="index.html" style="color:#c4b5fd;font-size:0.9rem;">Go track your mood →</a>
+    </div>`;
+} else {
+  entries.forEach((entry, i) => {
+    const meta = getMoodMeta(entry.mood);
+    const dateStr = new Date(entry.date).toLocaleDateString('en', { weekday:'long', month:'short', day:'numeric' });
+    historyList.innerHTML += `
+      <div class="entry-card" style="animation-delay:${i*0.05}s">
+        <div class="entry-emoji">${meta.emoji}</div>
+        <div class="entry-body">
+          <div class="entry-top">
+            <span class="entry-mood" style="color:${meta.color}">${meta.label}</span>
+            <span class="entry-date">${dateStr}</span>
+          </div>
+          <div class="entry-note">${entry.note || '<span style="opacity:0.4;font-style:italic;">No note</span>'}</div>
+        </div>
+        ${entry.doodle ? `<img class="entry-doodle-thumb" src="${entry.doodle}" alt="Doodle" onclick="openDoodleModal('${entry.doodle}')">` : ''}
+      </div>`;
+  });
+}
+LangManager.apply();
+
+// ── Doodle Modal ──
+function openDoodleModal(src) {
+  document.getElementById('modal-doodle-img').src = src;
+  document.getElementById('doodle-modal').classList.add('open');
+}
+function closeDoodleModal() {
+  document.getElementById('doodle-modal').classList.remove('open');
+}
+document.getElementById('doodle-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeDoodleModal();
+});
+</script>
+</body>
+</html>
