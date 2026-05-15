@@ -8,13 +8,13 @@ MoodVerse is a dynamic web application designed to enhance the user’s mood thr
 🔍 Easy mood selection and navigation
 📱 Fully responsive design for all devices
 ⚡ Smooth user experience with modern web technologies
+
 🛠️ Tech Stack
 HTML
 CSS
 JavaScript
-(Add React / Node.js / Firebase etc. if used)
-📌 Purpose
 
+📌 Purpose
 The main goal of MoodVerse is to create a relaxing and personalized digital space where users can explore music and vibes according to their emotions.
 
 💡 Future Enhancements
